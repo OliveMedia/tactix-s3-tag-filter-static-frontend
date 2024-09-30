@@ -6,6 +6,9 @@ import isEmailValidator from "validator/lib/isEmail";
 import { useForm } from "@mantine/form";
 import { yupResolver } from "mantine-form-yup-resolver";
 import * as yup from "yup";
+import { client } from "../../utils/api-client";
+import { useActionOnData } from "../../hooks";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const signInValidationSchema = yup.object().shape({
   email: yup
@@ -24,7 +27,25 @@ const signInValidationSchema = yup.object().shape({
     .required("Password is required"),
 });
 
+const login = (data: any) => {
+  const apiBody = {
+    email: data["email"],
+    password: data["password"],
+  } as const;
+
+  return client({
+    method: "post",
+    endpoint: "superadmin/login",
+    optional: {
+      data: apiBody,
+    },
+  });
+};
+
 const Login = () => {
+  const navigate = useNavigate();
+
+  const token = localStorage.getItem("token");
   const form = useForm({
     mode: "controlled",
     validateInputOnChange: true,
@@ -35,11 +56,21 @@ const Login = () => {
     validate: yupResolver(signInValidationSchema),
   });
 
+  const { mutateAsync, isPending } = useActionOnData({
+    actionFunction: login,
+    queryToBeInvalidated: "login",
+  });
+
+  if (token) {
+    return <Navigate to="/" state={{ path: location.pathname }} />;
+  }
+
   return (
     <form
-      onSubmit={form.onSubmit(
-        (values) => console.log("values", values)
-        // mutateAsync(values).then(() => window.location.replace("/home"))
+      onSubmit={form.onSubmit((values: any) =>
+        mutateAsync(values)
+          .then((res) => localStorage.setItem("token", res.data.data.token))
+          .then(() => navigate("/", { replace: true }))
       )}
       className="auth  flex text-secondary-foreground justify-center items-center h-screen"
     >
@@ -66,7 +97,8 @@ const Login = () => {
 
         <Button
           type="submit"
-          disabled={!(form.isValid() && form.isDirty)}
+          disabled={!(form.isValid() && form.isDirty) || isPending}
+          loading={isPending}
           loaderProps={{
             type: "oval",
           }}

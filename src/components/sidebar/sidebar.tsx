@@ -34,7 +34,7 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
 }
 
 const menuItemsUpper = [
-  { route: "/home", icon: HomeIcon, label: "Home" },
+  { route: "/", icon: HomeIcon, label: "Home" },
   //   { route: "/chatHistory", icon: HistoryIcon, label: "History" },
   //   { route: "/note", icon: NoteIcon, label: "Note" },
 ];
@@ -42,7 +42,10 @@ const menuItemsUpper = [
 function Sidebar() {
   const location = useLocation();
 
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.replace("/login");
+  };
 
   const links = menuItemsUpper.map((link) => (
     <Link

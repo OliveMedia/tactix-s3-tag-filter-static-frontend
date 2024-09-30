@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL;
+const baseURL = import.meta.env.VITE_API_URL;
 // const baseURL = "https://sandbox.api.tactix.olivegroup.io/";
 
 interface ClientProps {

@@ -7,7 +7,7 @@ import { Notifications } from "@mantine/notifications";
 import Providers from "./utils/providers";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import { ErrorBoundary, Layout } from "./components";
+import { ErrorBoundary, Layout, ProtectedRoute } from "./components";
 
 const PageNotFound = lazy(
   () => import("../src/pages/pageNotFound/pageNotFound")
@@ -55,6 +55,7 @@ const theme = createTheme({
 });
 
 export default function App() {
+  const token = localStorage.getItem("token");
   return (
     <MantineProvider defaultColorScheme="dark" theme={theme}>
       <Notifications autoClose={4000} position="top-right" />
@@ -65,11 +66,11 @@ export default function App() {
               <Route
                 path="/"
                 element={
-                  <Layout>
+                  <ProtectedRoute>
                     <ErrorBoundary>
                       <Home />
                     </ErrorBoundary>
-                  </Layout>
+                  </ProtectedRoute>
                 }
               />
               <Route
@@ -83,9 +84,13 @@ export default function App() {
               <Route
                 path="*"
                 element={
-                  <Layout>
+                  token ? (
+                    <Layout>
+                      <PageNotFound />
+                    </Layout>
+                  ) : (
                     <PageNotFound />
-                  </Layout>
+                  )
                 }
               />
             </Routes>
