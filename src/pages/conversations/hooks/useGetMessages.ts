@@ -60,12 +60,12 @@ function useGetMessages({ conversationId }: IMessageList) {
   });
 
   useEffect(() => {
+    console.log("all", isSuccess);
     if (isSuccess) {
       const allChatList: any = [];
 
       data?.pages.map((group) => {
         return group.data.data.messages.map((chat: any) => {
-          console.log("chat", chat);
           chat.message.map((message: any) => {
             return allChatList.push({
               message,
@@ -75,7 +75,6 @@ function useGetMessages({ conversationId }: IMessageList) {
           });
         });
       });
-
       setMessages(allChatList);
     }
   }, [data, isSuccess]);

@@ -6,9 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { useViewportSize } from "@mantine/hooks";
 
 const data = [
-  { icon: IconGauge, label: "Dashboard", link: "/" },
+  // { icon: IconGauge, label: "Dashboard", link: "/" },
 
-  { icon: IconUsers, label: "Users", link: "/users" },
+  { icon: IconUsers, label: "Users", link: "/" },
 ];
 
 const SideBar = () => {

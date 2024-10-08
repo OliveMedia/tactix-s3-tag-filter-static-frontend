@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useGetMessages } from "../../hooks";
-import { Skeleton } from "@mantine/core";
+import { Box, Center, Skeleton } from "@mantine/core";
 
 import ReactMarkdown from "react-markdown";
 import { InfiniteScroller } from "../../../../components";
@@ -9,7 +9,6 @@ const Messages = ({ conversationId }: { conversationId: string }) => {
   const { messages, fetchNextPage, hasNextPage, isLoading } = useGetMessages({
     conversationId,
   });
-
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isAPICall, setStartAPICall] = useState(false);
 
@@ -80,7 +79,7 @@ const Messages = ({ conversationId }: { conversationId: string }) => {
       >
         <div ref={scrollRef} />
         <ul className="flex flex-col space-y-3 w-full justify-center px-[20px]">
-          {isLoading || messages === null ? (
+          {isLoading || (messages === null && conversationId) ? (
             <ul>
               {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
                 <>{renderSkeletonLoader(item)}</>
@@ -89,6 +88,12 @@ const Messages = ({ conversationId }: { conversationId: string }) => {
           ) : (
             messages?.map(renderMessage)
           )}
+          {(messages && messages.length === 0) ||
+            (messages === null && !conversationId && (
+              <Center h="calc(85vh)" bg="var(--mantine-color-gray-light)">
+                <Box>No messages Found</Box>
+              </Center>
+            ))}
         </ul>
       </InfiniteScroller>
     </div>
