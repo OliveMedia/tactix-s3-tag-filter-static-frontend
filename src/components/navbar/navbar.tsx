@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Group, Switch, Text, useMantineColorScheme, rem } from "@mantine/core";
 
 import { IconMoon, IconSun } from "@tabler/icons-react";
+import { useViewportSize } from "@mantine/hooks";
 
 const Navbar = () => {
   const [greeting, setGreeting] = useState("");
 
   const { toggleColorScheme } = useMantineColorScheme();
+
+  const { width } = useViewportSize();
 
   const [checked, setChecked] = useState(false);
 
@@ -27,7 +30,13 @@ const Navbar = () => {
 
   return (
     <>
-      <header className=" z-40 p-4 fixed top-0 left-[98px] flex shadow-sm border-b-gray-300 bg-gray-200 dark:bg-primary w-[calc(100vw-98px)] items-center justify-between">
+      <header
+        className={`${
+          width > 1040
+            ? "left-[300px] w-[calc(100vw-290px)]"
+            : "w-[calc(100vw-70px)] left-[70px]"
+        } z-40 p-3 border border-s-0 border-t-0 border-x-0 border-b-gray-300 dark:border-b-zinc-700  fixed top-0 flex items-center justify-between`}
+      >
         {/* {!isLoading ? (
           <Text fw="bold">{greeting + " " + profile?.name}</Text>
         ) : (

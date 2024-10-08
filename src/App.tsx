@@ -17,41 +17,14 @@ const Home = lazy(() => import("../src/pages/home/home"));
 
 const Login = lazy(() => import("../src/pages/login/login"));
 
+const Users = lazy(() => import("../src/pages/users/users"));
+
+const Conversations = lazy(
+  () => import("../src/pages/conversations/conversations")
+);
+
 const theme = createTheme({
   // white: "#e5e5e5",
-  primaryColor: "brand",
-  colors: {
-    dark: [
-      "#787B82",
-      "#6B6F78",
-      "#60656E",
-      "#565B66",
-      "#4C525E",
-      "#434A58",
-      "#3B4252",
-      "#373C48",
-      "#33373F",
-      "#2F3238",
-      "#2B2D31",
-      "#27292C",
-      "#242527",
-    ],
-    brand: [
-      "#4C4F53",
-      "#45474C",
-      "#3E4146",
-      "#373B41",
-      "#31353C",
-      "#2B3038",
-      "#262B34",
-      "#23272E",
-      "#212328",
-      "#1E2023",
-      "#1C1D1F",
-      "#191A1C",
-      "#171819",
-    ],
-  },
 });
 
 export default function App() {
@@ -69,6 +42,26 @@ export default function App() {
                   <ProtectedRoute>
                     <ErrorBoundary>
                       <Home />
+                    </ErrorBoundary>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/users"
+                element={
+                  <ProtectedRoute>
+                    <ErrorBoundary>
+                      <Users />
+                    </ErrorBoundary>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/users/:userId/conversations"
+                element={
+                  <ProtectedRoute>
+                    <ErrorBoundary>
+                      <Conversations />
                     </ErrorBoundary>
                   </ProtectedRoute>
                 }

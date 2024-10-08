@@ -2,55 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --primary: #262b34;
-    --primary-foreground: #303642;
 
-    --secondary: #3b4252;
-    --secondary-foreground: #a3a8b1;
-
-    --accent: #a2b4e6;
-    --accent-foreground: #ccd9f9;
-
-    --text: #d7dadf;
-
-    --background: #ffffff;
-    --foreground: #000000;
-
-    --success: #28a745;
-    --destructive: #dc3545;
-
-    --border: #e5e5e5;
-    --border-outline: #e5e5e5;
-
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --primary: #262b34;
-    --primary-foreground: #303642;
-
-    --secondary: #3b4252;
-    --secondary-foreground: #a3a8b1;
-
-    --accent: #a2b4e6;
-    --accent-foreground: #ccd9f9;
-
-    --text: #d7dadf;
-
-    --background: #3b4252;
-    --foreground: #000000;
-
-    --success: #28a745;
-    --destructive: #dc3545;
-
-    --border: #e5e5e5;
-    --border-outline: #e5e5e5;
-
-    --radius: 0.5rem;
-  }
-}
 
 html,
 body {

@@ -1,87 +1,50 @@
-"use client";
-
-import { Center, UnstyledButton, Stack } from "@mantine/core";
-
-import {
-  HelpIcon,
-  HomeIcon,
-  LogoIcon,
-  LogoutIcon,
-  SettingsIcon,
-} from "../icons";
-
+import { Group, Code, ScrollArea, NavLink, Box } from "@mantine/core";
+import { IconGauge, IconUsers } from "@tabler/icons-react";
 import classes from "./sidebar.module.css";
-import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useViewportSize } from "@mantine/hooks";
 
-interface NavbarLinkProps {
-  icon: typeof HomeIcon;
-  label: string;
-  active?: boolean;
-  onClick?(): void;
-}
+const data = [
+  { icon: IconGauge, label: "Dashboard", link: "/" },
 
-function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
-  return (
-    <UnstyledButton
-      onClick={onClick}
-      className={classes.link}
-      data-active={active || undefined}
-    >
-      <Icon />
-      <div className="text-sm text-secondary-foreground">{label}</div>
-    </UnstyledButton>
-  );
-}
-
-const menuItemsUpper = [
-  { route: "/", icon: HomeIcon, label: "Home" },
-  //   { route: "/chatHistory", icon: HistoryIcon, label: "History" },
-  //   { route: "/note", icon: NoteIcon, label: "Note" },
+  { icon: IconUsers, label: "Users", link: "/users" },
 ];
 
-function Sidebar() {
-  const location = useLocation();
+const SideBar = () => {
+  const [active, setActive] = useState(0);
 
-  const handleLogout = () => {
-    localStorage.clear();
-    window.location.replace("/login");
-  };
+  const { width } = useViewportSize();
 
-  const links = menuItemsUpper.map((link) => (
-    <Link
-      className={classes.link}
-      data-active={link.route === location.pathname || undefined}
-      to={{ pathname: link.route }}
-      key={link.label}
-    >
-      <link.icon />
-      <span className="text-sm text-secondary-foreground">{link.label}</span>
-    </Link>
+  const navigate = useNavigate();
+
+  const items = data.map((item, index) => (
+    <NavLink
+      key={item.label}
+      active={index === active}
+      label={width > 1040 ? item.label : ""}
+      leftSection={<item.icon size="1rem" stroke={1.5} />}
+      onClick={() => {
+        setActive(index);
+        navigate(item.link);
+      }}
+    />
   ));
 
   return (
-    <nav className={`${classes.navbar} bg-gray-200 shadow-md dark:bg-primary`}>
-      <Center>
-        <LogoIcon height="65" />
-      </Center>
-
-      <div className={classes.navbarMain}>
-        <Stack justify="center" gap={0} className="flex flex-col gap-5">
-          {links}
-        </Stack>
+    <nav className={classes.navbar}>
+      <div className={classes.header}>
+        <Group justify="space-between">
+          <Code fw={700}>Vepa</Code>
+        </Group>
       </div>
 
-      <Stack
-        justify="center"
-        gap={0}
-        className="flex flex-col gap-5 items-center justify-center"
-      >
-        <NavbarLink icon={SettingsIcon} label="Settings" />
-        <NavbarLink icon={HelpIcon} label="Help" />
-        <NavbarLink icon={LogoutIcon} label="Logout" onClick={handleLogout} />
-      </Stack>
+      <ScrollArea className={classes.links}>
+        <Box w={width > 1040 ? 300 : "auto"} className="space-y-5" mt={10}>
+          {items}
+        </Box>
+      </ScrollArea>
     </nav>
   );
-}
-
-export default Sidebar;
+};
+export default SideBar;
