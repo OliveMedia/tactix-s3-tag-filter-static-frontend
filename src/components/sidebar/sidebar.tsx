@@ -1,5 +1,5 @@
-import { Group, Code, ScrollArea, NavLink, Box } from "@mantine/core";
-import { IconGauge, IconUsers } from "@tabler/icons-react";
+import { Group, Code, ScrollArea, NavLink, Box, Button } from "@mantine/core";
+import { IconGauge, IconLogout, IconUsers } from "@tabler/icons-react";
 import classes from "./sidebar.module.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -31,6 +31,11 @@ const SideBar = () => {
     />
   ));
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.replace("/login");
+  };
+
   return (
     <nav className={classes.navbar}>
       <div className={classes.header}>
@@ -44,6 +49,14 @@ const SideBar = () => {
           {items}
         </Box>
       </ScrollArea>
+      <Button
+        leftSection={<IconLogout size={14} />}
+        variant="default"
+        mb={20}
+        onClick={handleLogout}
+      >
+        {width > 1040 ? "Sign Out" : ""}
+      </Button>
     </nav>
   );
 };
