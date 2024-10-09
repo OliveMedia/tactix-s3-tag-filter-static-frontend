@@ -1,5 +1,5 @@
 import { Group, Code, ScrollArea, NavLink, Box, Button } from "@mantine/core";
-import { IconGauge, IconLogout, IconUsers } from "@tabler/icons-react";
+import { IconLogout, IconUsers } from "@tabler/icons-react";
 import classes from "./sidebar.module.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";

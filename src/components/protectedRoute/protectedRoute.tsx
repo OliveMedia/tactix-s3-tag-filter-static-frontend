@@ -1,7 +1,6 @@
 import { FC } from "react";
-
 import { Navigate, useLocation } from "react-router-dom";
-
+import { isTokenExpired } from "@/utils/isTokenExpired";
 import { Layout } from "../layout";
 
 interface IProtectedRoute {
@@ -12,9 +11,18 @@ const ProtectedRoute: FC<IProtectedRoute> = ({ children }) => {
   const token = localStorage.getItem("token");
   const location = useLocation();
 
-  if (token === null) {
+  // Check if the token is expired or does not exist
+  if (token === null || isTokenExpired(token)) {
+    // Remove the expired token from localStorage if it exists
+    if (token !== null) {
+      localStorage.removeItem("token");
+    }
+
+    // Redirect to the login page
     return <Navigate to="/login" state={{ path: location.pathname }} />;
   }
+
+  // If the token is valid, render the children inside the Layout
   return <Layout>{children}</Layout>;
 };
 
