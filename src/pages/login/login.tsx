@@ -102,7 +102,6 @@ const Login = () => {
           loaderProps={{
             type: "oval",
           }}
-          className="bg-accent text-black disabled:bg-gray-600 disabled:text-gray-500 disabled:cursor-not-allowed font-semibold rounded-md hover:bg-accent-foreground hover:text-black"
         >
           Sign In
         </Button>

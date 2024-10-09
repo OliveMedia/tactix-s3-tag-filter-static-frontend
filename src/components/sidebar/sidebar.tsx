@@ -1,28 +1,22 @@
-import { Group, Code, ScrollArea, NavLink, Box, Button } from "@mantine/core";
+import {
+  Box,
+  Burger,
+  Button,
+  Code,
+  Group,
+  NavLink,
+  ScrollArea,
+} from "@mantine/core";
 import { IconLogout, IconUsers } from "@tabler/icons-react";
-import classes from "./sidebar.module.css";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useViewportSize } from "@mantine/hooks";
 
-const data = [
-  // { icon: IconGauge, label: "Dashboard", link: "/" },
+const menuItems = [{ icon: IconUsers, label: "Users", link: "/" }];
 
-  { icon: IconUsers, label: "Users", link: "/" },
-];
-
-const SideBar = () => {
-  const [active, setActive] = useState(0);
-
-  const { width } = useViewportSize();
-
-  const navigate = useNavigate();
-
-  const items = data.map((item, index) => (
+const Sidebar = ({ active, setActive, navigate, opened, toggle }: any) => {
+  const items = menuItems.map((item, index) => (
     <NavLink
       key={item.label}
       active={index === active}
-      label={width > 1040 ? item.label : ""}
+      label={item.label}
       leftSection={<item.icon size="1rem" stroke={1.5} />}
       onClick={() => {
         setActive(index);
@@ -37,27 +31,27 @@ const SideBar = () => {
   };
 
   return (
-    <nav className={classes.navbar}>
-      <div className={classes.header}>
-        <Group justify="space-between">
-          <Code fw={700}>Vepa</Code>
+    <Box className="flex flex-col justify-between  h-full" p="md">
+      <Group>
+        <Group w="100%">
+          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+          <Code fw={700}>Vepa SuperAdmin</Code>
         </Group>
-      </div>
+        <ScrollArea className="w-full" mt={10}>
+          <Box className="space-y-5">{items}</Box>
+        </ScrollArea>
+      </Group>
 
-      <ScrollArea className={classes.links}>
-        <Box w={width > 1040 ? 300 : "auto"} className="space-y-5" mt={10}>
-          {items}
-        </Box>
-      </ScrollArea>
       <Button
         leftSection={<IconLogout size={14} />}
         variant="default"
-        mb={20}
         onClick={handleLogout}
+        className="justify-end"
       >
-        {width > 1040 ? "Sign Out" : ""}
+        Sign Out
       </Button>
-    </nav>
+    </Box>
   );
 };
-export default SideBar;
+
+export default Sidebar;

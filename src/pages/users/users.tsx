@@ -1,4 +1,11 @@
-import { Menu, Pagination, rem, Skeleton, Table } from "@mantine/core";
+import {
+  Menu,
+  Pagination,
+  rem,
+  ScrollArea,
+  Skeleton,
+  Table,
+} from "@mantine/core";
 import { useGetUsers } from "./hooks";
 import { IconDots, IconEye } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
@@ -49,27 +56,29 @@ const Users = () => {
     )
   );
   return (
-    <div className="flex flex-col items-end text-text pl-[98px] lg:pl-80 mt-[74px] overflow-hidden">
-      <Table verticalSpacing="lg">
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Name</Table.Th>
-            <Table.Th>Email</Table.Th>
-            <Table.Th>Number</Table.Th>
-            <Table.Th>Gender</Table.Th>
-            <Table.Th>Age</Table.Th>
-            <Table.Th>Address</Table.Th>
-            <Table.Th>CreatedAt</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>{isLoading ? rowsSkeletonLoader : rows}</Table.Tbody>
-      </Table>
-      <Pagination
-        total={totalPages}
-        value={currentPage}
-        onChange={setCurrentPage}
-      />
-    </div>
+    <ScrollArea>
+      <div className="flex flex-col items-end text-text h-[calc(100vh-170px)]">
+        <Table verticalSpacing="lg">
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th>Name</Table.Th>
+              <Table.Th>Email</Table.Th>
+              <Table.Th>Number</Table.Th>
+              <Table.Th>Gender</Table.Th>
+              <Table.Th>Age</Table.Th>
+              <Table.Th>Address</Table.Th>
+              <Table.Th>CreatedAt</Table.Th>
+            </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody>{isLoading ? rowsSkeletonLoader : rows}</Table.Tbody>
+        </Table>
+        <Pagination
+          total={totalPages}
+          value={currentPage}
+          onChange={setCurrentPage}
+        />
+      </div>
+    </ScrollArea>
   );
 };
 

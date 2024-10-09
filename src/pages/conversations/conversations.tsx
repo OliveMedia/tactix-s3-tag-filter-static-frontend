@@ -1,23 +1,25 @@
-import { Grid } from "@mantine/core";
+import { Grid, ScrollArea } from "@mantine/core";
 import { ChatHistory, Messages } from "./components";
 import { useState } from "react";
 
 const Users = () => {
   const [conversationId, setConversationId] = useState("");
   return (
-    <div className="flex flex-col items-end text-text pl-[98px] lg:pl-80 mt-[74px] overflow-hidden">
-      <Grid w="100%">
-        <Grid.Col span={2}>
-          <ChatHistory
-            conversationId={conversationId}
-            setConversationId={setConversationId}
-          />
-        </Grid.Col>
-        <Grid.Col span={10}>
-          <Messages conversationId={conversationId} />
-        </Grid.Col>
-      </Grid>
-    </div>
+    <ScrollArea>
+      <div className="flex flex-col items-end text-text overflow-hidden h-[calc(100vh-170px)]">
+        <Grid w="100%">
+          <Grid.Col span={2}>
+            <ChatHistory
+              conversationId={conversationId}
+              setConversationId={setConversationId}
+            />
+          </Grid.Col>
+          <Grid.Col span={10}>
+            <Messages conversationId={conversationId} />
+          </Grid.Col>
+        </Grid>
+      </div>
+    </ScrollArea>
   );
 };
 

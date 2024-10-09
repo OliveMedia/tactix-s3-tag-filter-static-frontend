@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
 import { useQuery } from "@tanstack/react-query";
-import { client } from "../../../../utils/api-client";
-import { useGlobalStore } from "../../../../store";
+import { client } from "@/utils/api-client";
+import { useGlobalStore } from "@/store";
 
 function useGetUsers() {
   const [userData, setUserData] = useState<any>(null);
@@ -11,7 +11,7 @@ function useGetUsers() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [pageLimit] = useState(12);
+  const [pageLimit] = useState(10);
 
   const { token } = useGlobalStore();
 
