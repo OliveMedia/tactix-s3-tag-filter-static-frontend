@@ -8,7 +8,6 @@ import { SideBar } from "../sidebar";
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [opened, { toggle }] = useDisclosure();
   const [greeting, setGreeting] = useState("");
-  const [active, setActive] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,13 +33,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <Navbar opened={opened} toggle={toggle} greeting={greeting} />
       </AppShell.Header>
       <AppShell.Navbar>
-        <SideBar
-          active={active}
-          setActive={setActive}
-          navigate={navigate}
-          opened={opened}
-          toggle={toggle}
-        />
+        <SideBar navigate={navigate} opened={opened} toggle={toggle} />
       </AppShell.Navbar>
       <AppShell.Main>
         <ScrollArea>{children}</ScrollArea>

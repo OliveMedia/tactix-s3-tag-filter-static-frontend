@@ -7,21 +7,53 @@ import {
   NavLink,
   ScrollArea,
 } from "@mantine/core";
-import { IconLogout, IconUsers } from "@tabler/icons-react";
+import {
+  IconLogout,
+  IconMessage,
+  IconSettings,
+  IconUsers,
+} from "@tabler/icons-react";
+import { useLocation } from "react-router-dom";
 
-const menuItems = [{ icon: IconUsers, label: "Users", link: "/" }];
+const menuItems = [
+  { icon: IconUsers, label: "Users", link: "/" },
+  {
+    icon: IconSettings,
+    label: "Settings",
+    links: [{ label: "Chat Settings", link: "/chat-settings" }],
+  },
+];
 
-const Sidebar = ({ active, setActive, navigate, opened, toggle }: any) => {
-  const items = menuItems.map((item, index) => (
+const Sidebar = ({ navigate, opened, toggle }: any) => {
+  const location = useLocation();
+
+  const items = menuItems.map((item) => (
     <NavLink
       key={item.label}
-      active={index === active}
+      active={item.link === location.pathname}
       label={item.label}
       leftSection={<item.icon size="1rem" stroke={1.5} />}
       onClick={() => {
-        setActive(index);
+        if (item.links) {
+          return;
+        }
         navigate(item.link);
       }}
+      children={
+        item.links
+          ? item.links.map((link) => (
+              <NavLink
+                key={link.link}
+                label={link.label}
+                active={link.link === location.pathname}
+                onClick={() => {
+                  navigate(link.link);
+                }}
+                leftSection={<IconMessage size="1rem" stroke={1.5} />}
+              />
+            ))
+          : null
+      }
     />
   ));
 

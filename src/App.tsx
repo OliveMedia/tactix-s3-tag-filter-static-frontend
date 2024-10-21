@@ -16,6 +16,10 @@ const PageNotFound = lazy(
 
 const Home = lazy(() => import("../src/pages/home/home"));
 
+const ChatSettings = lazy(
+  () => import("../src/pages/settings/chatSettings/chatSettings")
+);
+
 const Login = lazy(() => import("../src/pages/login/login"));
 
 const Users = lazy(() => import("../src/pages/users/users"));
@@ -47,6 +51,16 @@ export default function App() {
                   </ProtectedRoute>
                 }
               /> */}
+              <Route
+                path="/chat-settings"
+                element={
+                  <ProtectedRoute>
+                    <ErrorBoundary>
+                      <ChatSettings />
+                    </ErrorBoundary>
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/"
                 element={
