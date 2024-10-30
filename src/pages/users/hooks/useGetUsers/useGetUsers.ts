@@ -7,6 +7,8 @@ import { useGlobalStore } from "@/store";
 function useGetUsers() {
   const [userData, setUserData] = useState<any>(null);
 
+  const [searchValue, setSearchValue] = useState("");
+
   const [totalPages, setTotalPages] = useState(0);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,13 +20,16 @@ function useGetUsers() {
   const getUserList = ({
     currentPage,
     pageLimit,
+    searchValue,
   }: {
     currentPage: number;
     pageLimit: number;
+    searchValue: string;
   }) => {
     const params = {
       page: currentPage,
       limit: pageLimit,
+      search_key: searchValue,
     };
 
     return client({
@@ -38,8 +43,8 @@ function useGetUsers() {
   };
 
   const { data, error, isLoading, isSuccess, isError, isFetching } = useQuery({
-    queryKey: ["users", { currentPage }],
-    queryFn: () => getUserList({ currentPage, pageLimit }),
+    queryKey: ["users", { currentPage, searchValue }],
+    queryFn: () => getUserList({ currentPage, pageLimit, searchValue }),
   });
 
   useEffect(() => {
@@ -85,6 +90,8 @@ function useGetUsers() {
     isFetching,
     setCurrentPage,
     currentPage,
+    setSearchValue,
+    searchValue,
   };
 }
 

@@ -1,4 +1,6 @@
 import {
+  Flex,
+  Input,
   Menu,
   Pagination,
   rem,
@@ -9,10 +11,19 @@ import {
 import { useGetUsers } from "./hooks";
 import { IconDots, IconEye } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
+import { Search } from "@/components";
 
 const Users = () => {
-  const { userData, totalPages, setCurrentPage, currentPage, isLoading } =
-    useGetUsers();
+  const {
+    userData,
+    totalPages,
+    setCurrentPage,
+    currentPage,
+    searchValue,
+    isLoading,
+    setSearchValue,
+  } = useGetUsers();
+
   const navigate = useNavigate();
   const rows = userData?.rows?.map((user: any) => (
     <Table.Tr key={user.id}>
@@ -57,8 +68,15 @@ const Users = () => {
   );
   return (
     <ScrollArea>
-      <div className="flex flex-col items-end text-text h-[calc(100vh-170px)]">
-        <Table verticalSpacing="lg">
+      <Flex h="h-[calc(100vh-170px)]" direction="column" align="end" gap="lg">
+        <Search search={searchValue} setSearch={setSearchValue} />
+        <Table
+          verticalSpacing="lg"
+          striped
+          highlightOnHover
+          withTableBorder
+          className="rounded-md"
+        >
           <Table.Thead>
             <Table.Tr>
               <Table.Th>Name</Table.Th>
@@ -77,7 +95,7 @@ const Users = () => {
           value={currentPage}
           onChange={setCurrentPage}
         />
-      </div>
+      </Flex>
     </ScrollArea>
   );
 };
