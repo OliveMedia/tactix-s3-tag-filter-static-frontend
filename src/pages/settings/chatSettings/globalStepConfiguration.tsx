@@ -38,7 +38,7 @@ const GlobalStepConfiguration = ({ close }: any) => {
         response.data.data.tasks.map((step: any) => ({
           value: step.name,
           label: step.name,
-          disabled: step.can_select,
+          disabled: !step.can_select,
         }))
       );
       setHasStepsFetched(true); // Set hasFetched to true after fetching data
