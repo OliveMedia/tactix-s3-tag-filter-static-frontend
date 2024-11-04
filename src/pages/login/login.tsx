@@ -58,7 +58,7 @@ const Login = () => {
 
   const { mutateAsync, isPending } = useActionOnData({
     actionFunction: login,
-    queryToBeInvalidated: "login",
+    queryToBeInvalidated: ["login"],
   });
 
   if (token) {

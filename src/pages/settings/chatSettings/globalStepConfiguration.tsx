@@ -67,7 +67,7 @@ const GlobalStepConfiguration = ({ close }: any) => {
 
   const { isPending, mutateAsync } = useActionOnData({
     actionFunction: configureStep,
-    queryToBeInvalidated: "steps",
+    queryToBeInvalidated: ["steps"],
   });
 
   const form = useForm({

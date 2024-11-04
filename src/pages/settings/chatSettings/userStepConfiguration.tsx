@@ -12,7 +12,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -31,7 +31,7 @@ const UserStepConfiguration = ({
   const [steps, setSteps] = useState([]);
 
   // Function to fetch options from API
-  const fetchOptions = async () => {
+  const fetchOptions = useCallback(async () => {
     setLoading(true);
     try {
       // Replace with your actual API endpoint
@@ -53,9 +53,9 @@ const UserStepConfiguration = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
-  const fetchSteps = async () => {
+  const fetchSteps = useCallback(async () => {
     setIsStepsLoading(true);
     try {
       // Replace with your actual API endpoint
@@ -80,17 +80,12 @@ const UserStepConfiguration = ({
     } finally {
       setIsStepsLoading(false);
     }
-  };
+  }, [token]);
 
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
-      user: selectedItemForEdit
-        ? {
-            label: selectedItemForEdit.user_step.name,
-            value: selectedItemForEdit.user_step.id,
-          }
-        : null,
+      user: null,
       step: null,
       isActive: true,
     },
@@ -101,19 +96,21 @@ const UserStepConfiguration = ({
     },
   });
 
-  // useEffect(() => {
-  //   if (selectedItemForEdit) {
-  //     form.setValues({
-  //       step: selectedItemForEdit.start_step,
-  //       user: {
-  //         label:selectedItemForEdit.user_step.name,
-  //         value:selectedItemForEdit.user_step.id
-  //       },
-  //     });
-  //   }
-  // }, [form, selectedItemForEdit]);
+  useEffect(() => {
+    // Fetch options if not yet fetched
+    if (!hasFetched) fetchOptions();
+    if (!hasStepsFetched) fetchSteps();
+  }, [fetchOptions, fetchSteps, hasFetched, hasStepsFetched]);
 
-  console.log("selectedItemForEdit", steps);
+  useEffect(() => {
+    if (selectedItemForEdit && hasStepsFetched && hasFetched) {
+      form.setValues({
+        step: selectedItemForEdit.start_step,
+        user: selectedItemForEdit?.user.id,
+        isActive: selectedItemForEdit.status,
+      });
+    }
+  }, [hasFetched, hasStepsFetched, selectedItemForEdit]);
 
   const configureStep = (data: any) => {
     const apiBody = {
@@ -134,14 +131,16 @@ const UserStepConfiguration = ({
 
   const { isPending, mutateAsync } = useActionOnData({
     actionFunction: configureStep,
-    queryToBeInvalidated: "steps",
+    queryToBeInvalidated: ["steps"],
   });
 
   return (
     <form
       className="flex flex-col space-y-5"
       onSubmit={form.onSubmit((values: any) =>
-        mutateAsync(values).then(() => close())
+        mutateAsync(values)
+          .then(() => close())
+          .then(() => setSelectedItemForEdit(null))
       )}
     >
       <Select
@@ -155,9 +154,9 @@ const UserStepConfiguration = ({
         }}
         value={form.getValues().user}
         clearable
+        disabled={selectedItemForEdit}
         nothingFoundMessage={loading ? "Loading..." : "No options found"}
         rightSection={loading && <Loader size="xs" />}
-        key={form.key("user")}
         {...form.getInputProps("user")}
       />
 
@@ -170,9 +169,9 @@ const UserStepConfiguration = ({
             fetchSteps();
           }
         }}
+        value={form.getValues().step}
         clearable
         withAsterisk
-        key={form.key("step")}
         nothingFoundMessage={isStepsLoading ? "Loading..." : "No options found"}
         rightSection={isStepsLoading && <Loader size="xs" />}
         {...form.getInputProps("step")}

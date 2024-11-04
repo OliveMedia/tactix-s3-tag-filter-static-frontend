@@ -25,10 +25,7 @@ import UserStepConfiguration from "./userStepConfiguration";
 import { useEffect, useState } from "react";
 
 const ChatSettings = () => {
-  const { userData, totalPages, setCurrentPage, currentPage, isLoading } =
-    useGetUsers();
-
-  const { isFetching, userSteps } = useGetUserSteps();
+  const { userSteps, isLoading } = useGetUserSteps();
 
   const [selectedItemForEdit, setSelectedItemForEdit] = useState(null);
 
@@ -40,8 +37,6 @@ const ChatSettings = () => {
       close: closeGlobalStepConfigurationForm,
     },
   ] = useDisclosure(false);
-
-  console.log({ userSteps });
 
   const rows = userSteps?.user_steps?.map((user: any, index: number) => (
     <Table.Tr key={user.user_step?.id}>
@@ -61,7 +56,7 @@ const ChatSettings = () => {
         )}
       </Table.Td>
 
-      {/* <Table.Td>
+      <Table.Td>
         <Menu shadow="md" width={200}>
           <Menu.Target>
             <IconDots className="cursor-pointer" />
@@ -81,7 +76,7 @@ const ChatSettings = () => {
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>
-      </Table.Td> */}
+      </Table.Td>
     </Table.Tr>
   ));
 
@@ -101,22 +96,35 @@ const ChatSettings = () => {
     <>
       <Flex direction="column" align="end" gap="lg" h="calc(100vh - 170px)">
         <Group justify="space-between" w="100%">
-          <Text>
-            Global Step:
-            <Badge
-              ml={10}
-              size="lg"
-              color={userSteps?.global_steps?.status ? "teal" : "gray"}
-              variant={userSteps?.global_steps?.status ? "filled" : "outline"}
-            >
-              {userSteps?.global_steps?.start_step}
-            </Badge>
-          </Text>
+          {isLoading ? (
+            <Skeleton h={30} w={200} />
+          ) : (
+            <Text>
+              Global Step:
+              <Badge
+                ml={10}
+                size="lg"
+                color={userSteps?.global_steps?.status ? "teal" : "gray"}
+                variant={userSteps?.global_steps?.status ? "filled" : "outline"}
+              >
+                {userSteps?.global_steps?.start_step}
+              </Badge>
+            </Text>
+          )}
           <Group>
-            <Button onClick={open}>Add Steps</Button>
-            <Button onClick={openGlobalStepConfigurationForm}>
-              Configure Global Step
-            </Button>
+            {isLoading ? (
+              <>
+                <Skeleton h={30} w={100} />
+                <Skeleton h={30} w={100} />
+              </>
+            ) : (
+              <>
+                <Button onClick={open}>Add Steps</Button>
+                <Button onClick={openGlobalStepConfigurationForm}>
+                  Configure Global Step
+                </Button>
+              </>
+            )}
           </Group>
         </Group>
 
@@ -155,13 +163,6 @@ const ChatSettings = () => {
             )}
           </Table.Tbody>
         </Table>
-        {userData && userData.length > 0 && (
-          <Pagination
-            total={totalPages}
-            value={currentPage}
-            onChange={setCurrentPage}
-          />
-        )}
       </Flex>
       <Modal
         opened={globalStepConfigurationFormOpended}
@@ -170,7 +171,14 @@ const ChatSettings = () => {
       >
         <GlobalStepConfiguration close={closeGlobalStepConfigurationForm} />
       </Modal>
-      <Modal opened={opened} onClose={close} title="Configure Steps">
+      <Modal
+        opened={opened}
+        onClose={() => {
+          close();
+          setSelectedItemForEdit(null);
+        }}
+        title="Configure Steps"
+      >
         <UserStepConfiguration
           selectedItemForEdit={selectedItemForEdit}
           setSelectedItemForEdit={setSelectedItemForEdit}

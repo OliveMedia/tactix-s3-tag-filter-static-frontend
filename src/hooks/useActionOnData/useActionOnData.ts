@@ -6,12 +6,13 @@ import { notifications } from "@mantine/notifications";
 interface IActionOnDataProps {
   actionFunction: any;
   navigateTo?: string;
-  queryToBeInvalidated: string;
+  queryToBeInvalidated: string[];
 }
 
 export const useActionOnData = ({
   actionFunction,
   navigateTo,
+  queryToBeInvalidated,
 }: IActionOnDataProps) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ export const useActionOnData = ({
           message: data?.data?.message,
           color: "teal",
         });
-        queryClient.invalidateQueries();
+        queryClient.invalidateQueries({ queryKey: queryToBeInvalidated });
         if (navigateTo) {
           navigate(`${navigateTo}`);
         }
