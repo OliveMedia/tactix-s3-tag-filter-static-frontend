@@ -14,6 +14,8 @@ import { useForm } from "@mantine/form";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
+const baseURL = import.meta.env.VITE_API_URL;
+
 const UserStepConfiguration = ({
   selectedItemForEdit,
   setSelectedItemForEdit,
@@ -33,14 +35,11 @@ const UserStepConfiguration = ({
     setLoading(true);
     try {
       // Replace with your actual API endpoint
-      const response = await axios.get(
-        "https://vepa-api.dev.olive.media/superadmin/users",
-        {
-          headers: {
-            token,
-          },
-        }
-      );
+      const response = await axios.get(`${baseURL}/superadmin/users`, {
+        headers: {
+          token,
+        },
+      });
       // Assuming API returns data in format: [{ value: '1', label: 'Option 1' }]
       setOptions(
         response.data.data.users.map((user: any) => ({
@@ -61,14 +60,20 @@ const UserStepConfiguration = ({
     try {
       // Replace with your actual API endpoint
       const response = await axios.get(
-        "https://vepa-api.dev.olive.media/superadmin/conversation-steps",
+        `${baseURL}/superadmin/conversation-steps`,
         {
           headers: {
             token,
           },
         }
       );
-      setSteps(response.data.data.tasks.map((step: any) => step));
+      setSteps(
+        response.data.data.tasks.map((step: any) => ({
+          value: step.name,
+          label: step.name,
+          disabled: step.can_select,
+        }))
+      );
       setHasStepsFetched(true); // Set hasFetched to true after fetching data
     } catch (error) {
       console.error("Error fetching options:", error);
@@ -108,7 +113,7 @@ const UserStepConfiguration = ({
   //   }
   // }, [form, selectedItemForEdit]);
 
-  console.log("selectedItemForEdit", form.getValues());
+  console.log("selectedItemForEdit", steps);
 
   const configureStep = (data: any) => {
     const apiBody = {

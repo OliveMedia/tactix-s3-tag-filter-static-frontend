@@ -41,11 +41,13 @@ const ChatSettings = () => {
     },
   ] = useDisclosure(false);
 
+  console.log({ userSteps });
+
   const rows = userSteps?.user_steps?.map((user: any, index: number) => (
     <Table.Tr key={user.user_step?.id}>
       <Table.Td>{index + 1}</Table.Td>
-      <Table.Td>{user.user_step?.name}</Table.Td>
-      <Table.Td>{user.user_step?.genders}</Table.Td>
+      <Table.Td>{user.user.name}</Table.Td>
+      <Table.Td>{user.user.genders}</Table.Td>
       <Table.Td>{user.start_step}</Table.Td>
       <Table.Td>
         {user.status ? (
