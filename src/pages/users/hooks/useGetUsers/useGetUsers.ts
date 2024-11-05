@@ -51,7 +51,7 @@ function useGetUsers() {
     if (isSuccess) {
       const allUserList: any[] = [];
 
-      setTotalPages(Math.ceil(data.data.data.count / 12));
+      setTotalPages(Math.ceil(data.data.data.count / pageLimit));
 
       data.data.data.users.map((user: any) => {
         return allUserList.push({

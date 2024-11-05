@@ -26,34 +26,42 @@ const UserStepConfiguration = ({
   const [hasFetched, setHasFetched] = useState(false); // Track if data has been fetched already
 
   const { token } = useGlobalStore();
+  const [searchTerm, setSearchTerm] = useState(""); // State to store search input
   const [hasStepsFetched, setHasStepsFetched] = useState(false);
   const [isStepsLoading, setIsStepsLoading] = useState(false);
   const [steps, setSteps] = useState([]);
+  const searchDelay = 300; // Debounce delay in milliseconds
 
   // Function to fetch options from API
-  const fetchOptions = useCallback(async () => {
-    setLoading(true);
-    try {
-      // Replace with your actual API endpoint
-      const response = await axios.get(`${baseURL}/superadmin/users`, {
-        headers: {
-          token,
-        },
-      });
-      // Assuming API returns data in format: [{ value: '1', label: 'Option 1' }]
-      setOptions(
-        response.data.data.users.map((user: any) => ({
-          value: user.id,
-          label: user.name,
-        }))
-      );
-      setHasFetched(true); // Set hasFetched to true after fetching data
-    } catch (error) {
-      console.error("Error fetching options:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [token]);
+  const fetchOptions = useCallback(
+    async (searchQuery?: string) => {
+      setLoading(true);
+      try {
+        // Replace with your actual API endpoint
+        const response = await axios.get(`${baseURL}/superadmin/users`, {
+          headers: {
+            token,
+          },
+          params: {
+            search_key: searchQuery,
+          },
+        });
+        // Assuming API returns data in format: [{ value: '1', label: 'Option 1' }]
+        setOptions(
+          response.data.data.users.map((user: any) => ({
+            value: user.id,
+            label: user.name,
+          }))
+        );
+        setHasFetched(true); // Set hasFetched to true after fetching data
+      } catch (error) {
+        console.error("Error fetching options:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [token]
+  );
 
   const fetchSteps = useCallback(async () => {
     setIsStepsLoading(true);
@@ -95,6 +103,24 @@ const UserStepConfiguration = ({
       step: (value) => (value ? null : "Step cannot be empty"),
     },
   });
+
+  // Effect to manage the debounced API call when searchTerm changes
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout | null = null; // Declare a timeout ID for debouncing
+
+    // Clear the previous timeout if it exists
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    // Set a new timeout to call fetchOptions
+    timeoutId = setTimeout(() => {
+      fetchOptions(searchTerm);
+    }, searchDelay);
+
+    // Cleanup timeout on component unmount or before the next effect runs
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm]); // Runs whenever searchTerm changes
 
   useEffect(() => {
     // Fetch options if not yet fetched
@@ -147,16 +173,13 @@ const UserStepConfiguration = ({
         label="Select User"
         placeholder="Select User"
         data={options}
-        onDropdownOpen={() => {
-          if (!hasFetched) {
-            fetchOptions();
-          }
-        }}
         value={form.getValues().user}
         clearable
         disabled={selectedItemForEdit}
         nothingFoundMessage={loading ? "Loading..." : "No options found"}
         rightSection={loading && <Loader size="xs" />}
+        searchable
+        onSearchChange={(search) => setSearchTerm(search)}
         {...form.getInputProps("user")}
       />
 
@@ -164,11 +187,6 @@ const UserStepConfiguration = ({
         label="Select Step"
         placeholder="Select Step"
         data={steps}
-        onDropdownOpen={() => {
-          if (!hasStepsFetched) {
-            fetchSteps();
-          }
-        }}
         value={form.getValues().step}
         clearable
         withAsterisk
