@@ -1,5 +1,7 @@
 import {
+  Box,
   Flex,
+  Image,
   Input,
   Menu,
   Pagination,
@@ -7,11 +9,13 @@ import {
   ScrollArea,
   Skeleton,
   Table,
+  Text,
 } from "@mantine/core";
 import { useGetUsers } from "./hooks";
 import { IconDots, IconEye } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { Search } from "@/components";
+import NoDataImage from "../../assets/images/nodata.svg";
 
 const Users = () => {
   const {
@@ -23,6 +27,8 @@ const Users = () => {
     isLoading,
     setSearchValue,
   } = useGetUsers();
+
+  console.log({ userData });
 
   const navigate = useNavigate();
   const rows = userData?.rows?.map((user: any) => (
@@ -68,14 +74,14 @@ const Users = () => {
   );
   return (
     <ScrollArea>
-      <Flex h="h-[calc(100vh-170px)]" direction="column" align="end" gap="lg">
+      <Flex h="calc(100vh - 170px)" direction="column" align="end" gap="lg">
         <Search search={searchValue} setSearch={setSearchValue} />
         <Table
           verticalSpacing="lg"
           striped
           highlightOnHover
           withTableBorder
-          className="rounded-md"
+          className=" relative"
         >
           <Table.Thead>
             <Table.Tr>
@@ -88,7 +94,24 @@ const Users = () => {
               <Table.Th>CreatedAt</Table.Th>
             </Table.Tr>
           </Table.Thead>
-          <Table.Tbody>{isLoading ? rowsSkeletonLoader : rows}</Table.Tbody>
+          <Table.Tbody>
+            {isLoading ? (
+              rowsSkeletonLoader
+            ) : userData && userData?.rows?.length > 0 ? (
+              rows
+            ) : (
+              <Box
+                w="100%"
+                h="60vh"
+                className="flex justify-center items-center absolute"
+              >
+                <Flex justify="center" align="center" direction="column">
+                  <Image src={NoDataImage} className="h-36 w-36" />
+                  <Text>No Data Found</Text>
+                </Flex>
+              </Box>
+            )}
+          </Table.Tbody>
         </Table>
         <Pagination
           total={totalPages}
