@@ -4,6 +4,7 @@ import { useGetConversations } from "../../hooks";
 import { InfiniteScroller } from "../../../../components";
 import { Box, Center, List, rem, Skeleton, Text, Title } from "@mantine/core";
 import { IconMessage } from "@tabler/icons-react";
+import { useColorScheme } from "@mantine/hooks";
 
 const ChatHistory = ({
   setConversationId,
@@ -13,6 +14,8 @@ const ChatHistory = ({
   conversationId: string;
 }) => {
   const params = useParams();
+
+  const colorScheme = useColorScheme();
 
   const {
     conversations,
@@ -74,7 +77,9 @@ const ChatHistory = ({
                   key={conversation.id}
                   onClick={() => setConversationId(conversation.id)}
                   className={`hover:bg-zinc-700 p-2 cursor-pointer ${
-                    conversation.id === conversationId ? "bg-zinc-700" : ""
+                    conversation.id === conversationId
+                      ? "dark:bg-zinc-700 bg-gray-100"
+                      : ""
                   }`}
                 >
                   <Text className="break-words">{conversation.title}</Text>
