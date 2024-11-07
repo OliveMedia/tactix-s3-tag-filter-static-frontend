@@ -2,12 +2,15 @@ import { useActionOnData } from "@/hooks";
 import { useGlobalStore } from "@/store";
 import { client } from "@/utils/api-client";
 import {
+  Box,
   Button,
   Card,
   Checkbox,
   Group,
+  Input,
   Loader,
   Select,
+  Skeleton,
   Text,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -50,7 +53,7 @@ const UserStepConfiguration = ({
         setOptions(
           response.data.data.users.map((user: any) => ({
             value: user.id,
-            label: user.name,
+            label: user?.name || "N/A",
           }))
         );
         setHasFetched(true); // Set hasFetched to true after fetching data
@@ -131,12 +134,14 @@ const UserStepConfiguration = ({
   useEffect(() => {
     if (selectedItemForEdit && hasStepsFetched && hasFetched) {
       form.setValues({
-        step: selectedItemForEdit.start_step,
+        step: selectedItemForEdit?.start_step,
         user: selectedItemForEdit?.user.id,
-        isActive: selectedItemForEdit.status,
+        isActive: selectedItemForEdit?.status,
       });
     }
   }, [hasFetched, hasStepsFetched, selectedItemForEdit]);
+
+  console.log({ selectedItemForEdit });
 
   const configureStep = (data: any) => {
     const apiBody = {
@@ -169,38 +174,54 @@ const UserStepConfiguration = ({
           .then(() => setSelectedItemForEdit(null))
       )}
     >
-      <Select
-        label="Select User"
-        placeholder="Select User"
-        data={options}
-        value={form.getValues().user}
-        clearable
-        disabled={selectedItemForEdit}
-        nothingFoundMessage={loading ? "Loading..." : "No options found"}
-        rightSection={loading && <Loader size="xs" />}
-        searchable
-        onSearchChange={(search) => setSearchTerm(search)}
-        {...form.getInputProps("user")}
-      />
+      {hasStepsFetched || hasFetched ? (
+        <>
+          {selectedItemForEdit ? (
+            <Input value={selectedItemForEdit?.user?.name} disabled={true} />
+          ) : (
+            <Select
+              label="Select User"
+              placeholder="Select User"
+              data={options}
+              value={form?.getValues()?.user}
+              clearable
+              nothingFoundMessage={loading ? "Loading..." : "No options found"}
+              rightSection={loading && <Loader size="xs" />}
+              searchable
+              onSearchChange={(search) => setSearchTerm(search)}
+              {...form.getInputProps("user")}
+            />
+          )}
 
-      <Select
-        label="Select Step"
-        placeholder="Select Step"
-        data={steps}
-        value={form.getValues().step}
-        clearable
-        withAsterisk
-        nothingFoundMessage={isStepsLoading ? "Loading..." : "No options found"}
-        rightSection={isStepsLoading && <Loader size="xs" />}
-        {...form.getInputProps("step")}
-      />
+          <Select
+            label="Select Step"
+            placeholder="Select Step"
+            data={steps}
+            value={form?.getValues()?.step}
+            clearable
+            withAsterisk
+            nothingFoundMessage={
+              isStepsLoading ? "Loading..." : "No options found"
+            }
+            rightSection={isStepsLoading && <Loader size="xs" />}
+            {...form.getInputProps("step")}
+          />
 
-      <Checkbox
-        label="Enable Step"
-        {...form.getInputProps("isActive")}
-        key={form.key("isActive")}
-        checked={form.getValues().isActive}
-      />
+          <Checkbox
+            label="Enable Step"
+            defaultChecked={
+              selectedItemForEdit
+                ? selectedItemForEdit?.status
+                : form.values.isActive
+            }
+            {...form.getInputProps("isActive")}
+          />
+        </>
+      ) : (
+        <Group justify="center" h={100}>
+          Loading...
+        </Group>
+      )}
 
       <Group justify="flex-end" mt="md">
         <Button
