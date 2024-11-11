@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { client } from "@/utils/api-client";
 import { useGlobalStore } from "@/store";
+import { isTokenExpired } from "@/utils/isTokenExpired";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { notifications } from "@mantine/notifications";
 
 function useGetUsers() {
   const [userData, setUserData] = useState<any>(null);
@@ -16,6 +19,8 @@ function useGetUsers() {
   const [pageLimit] = useState(10);
 
   const { token } = useGlobalStore();
+
+  const navigate = useNavigate();
 
   const getUserList = ({
     currentPage,
@@ -31,6 +36,23 @@ function useGetUsers() {
       limit: pageLimit,
       search_key: searchValue,
     };
+
+    // if (token === null || isTokenExpired(token)) {
+    //   // Remove the expired token from localStorage if it exists
+    //   if (token !== null) {
+    //     localStorage.removeItem("token");
+    //   }
+
+    //   // Redirect to the login page
+    //   notifications.show({
+    //     title: "Session expired",
+    //     message: "Please login again to access the application",
+    //     color: "red",
+    //   });
+    //   setTimeout(() => {
+    //     navigate("/login");
+    //   }, 1000);
+    // }
 
     return client({
       method: "get",

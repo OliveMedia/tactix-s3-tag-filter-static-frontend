@@ -17,6 +17,7 @@ import { useLocation } from "react-router-dom";
 
 const menuItems = [
   { icon: IconUsers, label: "Users", link: "/" },
+  { icon: IconUsers, label: "Logs", link: "/logs" },
   {
     icon: IconSettings,
     label: "Settings",

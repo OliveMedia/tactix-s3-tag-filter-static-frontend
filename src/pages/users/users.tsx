@@ -59,65 +59,61 @@ const Users = () => {
     </Table.Tr>
   ));
 
-  const rowsSkeletonLoader = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(
-    (item) => (
-      <Table.Tr key={item}>
-        {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-          <Table.Td key={item}>
-            <Skeleton h={20} />
-          </Table.Td>
-        ))}
-      </Table.Tr>
-    )
-  );
+  const rowsSkeletonLoader = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
+    <Table.Tr key={item}>
+      {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
+        <Table.Td key={item}>
+          <Skeleton h={20} />
+        </Table.Td>
+      ))}
+    </Table.Tr>
+  ));
   return (
-    <ScrollArea>
-      <Flex h="calc(100vh - 170px)" direction="column" align="end" gap="lg">
-        <Search search={searchValue} setSearch={setSearchValue} />
-        <Table
-          verticalSpacing="lg"
-          striped
-          highlightOnHover
-          withTableBorder
-          className=" relative"
-        >
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th>Name</Table.Th>
-              <Table.Th>Email</Table.Th>
-              <Table.Th>Number</Table.Th>
-              <Table.Th>Gender</Table.Th>
-              <Table.Th>Age</Table.Th>
-              <Table.Th>Address</Table.Th>
-              <Table.Th>CreatedAt</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {isLoading ? (
-              rowsSkeletonLoader
-            ) : userData && userData?.rows?.length > 0 ? (
-              rows
-            ) : (
-              <Box
-                w="100%"
-                h="60vh"
-                className="flex justify-center items-center absolute"
-              >
-                <Flex justify="center" align="center" direction="column">
-                  <Image src={NoDataImage} className="h-36 w-36" />
-                  <Text>No Data Found</Text>
-                </Flex>
-              </Box>
-            )}
-          </Table.Tbody>
-        </Table>
-        <Pagination
-          total={totalPages}
-          value={currentPage}
-          onChange={setCurrentPage}
-        />
-      </Flex>
-    </ScrollArea>
+    <Flex direction="column" align="end" gap="lg">
+      <Search search={searchValue} setSearch={setSearchValue} />
+      <Table
+        verticalSpacing="lg"
+        striped
+        highlightOnHover
+        withTableBorder
+        className=" relative"
+      >
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>Name</Table.Th>
+            <Table.Th>Email</Table.Th>
+            <Table.Th>Number</Table.Th>
+            <Table.Th>Gender</Table.Th>
+            <Table.Th>Age</Table.Th>
+            <Table.Th>Address</Table.Th>
+            <Table.Th>CreatedAt</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody mih="60vh" h="60vh">
+          {isLoading ? (
+            rowsSkeletonLoader
+          ) : userData && userData?.rows?.length > 0 ? (
+            rows
+          ) : (
+            <Box
+              w="100%"
+              h="60vh"
+              className="flex justify-center items-center absolute"
+            >
+              <Flex justify="center" align="center" direction="column">
+                <Image src={NoDataImage} className="h-36 w-36" />
+                <Text>No Data Found</Text>
+              </Flex>
+            </Box>
+          )}
+        </Table.Tbody>
+      </Table>
+      <Pagination
+        total={totalPages}
+        value={currentPage}
+        onChange={setCurrentPage}
+      />
+    </Flex>
   );
 };
 

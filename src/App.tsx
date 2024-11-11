@@ -28,6 +28,8 @@ const Conversations = lazy(
   () => import("../src/pages/conversations/conversations")
 );
 
+const Logs = lazy(() => import("../src/pages/logs/logs"));
+
 const theme = createTheme({
   // white: "#e5e5e5",
 });
@@ -67,6 +69,16 @@ export default function App() {
                   <ProtectedRoute>
                     <ErrorBoundary>
                       <Users />
+                    </ErrorBoundary>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/logs"
+                element={
+                  <ProtectedRoute>
+                    <ErrorBoundary>
+                      <Logs />
                     </ErrorBoundary>
                   </ProtectedRoute>
                 }
