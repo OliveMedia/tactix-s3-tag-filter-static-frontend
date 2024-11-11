@@ -28,8 +28,6 @@ const Users = () => {
     setSearchValue,
   } = useGetUsers();
 
-  console.log({ userData });
-
   const navigate = useNavigate();
   const rows = userData?.rows?.map((user: any) => (
     <Table.Tr key={user.id}>
