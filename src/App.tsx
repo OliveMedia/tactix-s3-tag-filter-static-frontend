@@ -5,10 +5,10 @@ import "@mantine/notifications/styles.css";
 
 import { createTheme, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
-import Providers from "./utils/providers";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { ErrorBoundary, Layout, ProtectedRoute } from "./components";
+import Providers from "./utils/providers";
 
 const PageNotFound = lazy(
   () => import("../src/pages/pageNotFound/pageNotFound")
@@ -28,7 +28,7 @@ const Conversations = lazy(
   () => import("../src/pages/conversations/conversations")
 );
 
-const Logs = lazy(() => import("../src/pages/logs/logs"));
+const Logs = lazy(() => import("../src/pages/userLogs/userLogs"));
 
 const theme = createTheme({
   // white: "#e5e5e5",
