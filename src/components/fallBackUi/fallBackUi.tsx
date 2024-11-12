@@ -3,7 +3,7 @@ import { Fragment, useEffect, useRef } from "react";
 import { Button } from "@mantine/core";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FallbackProps } from "react-error-boundary";
-
+import BrokenRobot from "../../assets/images/broken-robot.png";
 const FallBackUi = ({ error, resetErrorBoundary }: FallbackProps) => {
   const pathname = useLocation();
   const previousRouteRef = useRef(pathname);
@@ -35,7 +35,7 @@ const FallBackUi = ({ error, resetErrorBoundary }: FallbackProps) => {
           }}
           height={500}
           width={500}
-          src="/assets/images/broken-robot.png"
+          src={BrokenRobot}
           alt="broken-robot"
         />
         <p>{`Uh oh... There's a problem. Try refreshing the app.`}</p>
