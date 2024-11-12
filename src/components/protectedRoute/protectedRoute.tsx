@@ -20,7 +20,7 @@ const ProtectedRoute: FC<IProtectedRoute> = ({ children }) => {
     }
     notifications.show({
       title: "Session expired",
-      message: "Please login again to access the application",
+      message: "Please login again to access the app",
       color: "red",
     });
     // Redirect to the login page
