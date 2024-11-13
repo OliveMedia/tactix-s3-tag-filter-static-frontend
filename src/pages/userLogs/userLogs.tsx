@@ -39,6 +39,7 @@ const UserLogs = () => {
     return (
       <Table.Tr key={log.id}>
         <Table.Td>{log.ACTION}</Table.Td>
+        <Table.Td>{log.USER_DETAILS.email || "N/A"}</Table.Td>
         <Table.Td>{log.DEVICE_INFO || "N/A"}</Table.Td>
         <Table.Td>{log.METHOD}</Table.Td>
         <Table.Td>{log.REQ_BODY || "N/A"}</Table.Td>
@@ -103,6 +104,7 @@ const UserLogs = () => {
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Action</Table.Th>
+            <Table.Th>User</Table.Th>
             <Table.Th>Device Info</Table.Th>
             <Table.Th>Method</Table.Th>
             <Table.Th>Request Body</Table.Th>
