@@ -1,22 +1,7 @@
-import {
-  Badge,
-  Box,
-  Flex,
-  Image,
-  Loader,
-  Pagination,
-  Select,
-  Skeleton,
-  Table,
-  Text,
-} from "@mantine/core";
+import { Badge, Box, Flex, Image, Skeleton, Table, Text } from "@mantine/core";
 
 import NoDataImage from "../../assets/images/nodata.svg";
-import { useGlobalStore } from "@/store";
-import axios from "axios";
 import { useEffect, useState } from "react";
-
-const baseURL = import.meta.env.VITE_API_URL;
 
 const bookingData = {
   rows: [
