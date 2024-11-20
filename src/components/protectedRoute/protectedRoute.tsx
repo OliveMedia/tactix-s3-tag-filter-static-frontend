@@ -22,6 +22,7 @@ const ProtectedRoute: FC<IProtectedRoute> = ({ children }) => {
       title: "Session expired",
       message: "Please login again to access the app",
       color: "red",
+      id: "login",
     });
     // Redirect to the login page
     return <Navigate to="/login" state={{ path: location.pathname }} />;

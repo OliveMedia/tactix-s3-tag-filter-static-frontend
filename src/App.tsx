@@ -29,6 +29,7 @@ const Conversations = lazy(
 );
 
 const Logs = lazy(() => import("../src/pages/userLogs/userLogs"));
+const Bookings = lazy(() => import("../src/pages/bookings/bookings"));
 
 const theme = createTheme({
   // white: "#e5e5e5",
@@ -38,7 +39,7 @@ export default function App() {
   const token = localStorage.getItem("token");
   return (
     <MantineProvider defaultColorScheme="dark" theme={theme}>
-      <Notifications autoClose={4000} position="top-right" />
+      <Notifications autoClose={4000} position="top-right" limit={1} />
       <Providers>
         <Router>
           <Suspense>
@@ -59,6 +60,16 @@ export default function App() {
                   <ProtectedRoute>
                     <ErrorBoundary>
                       <ChatSettings />
+                    </ErrorBoundary>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/bookings"
+                element={
+                  <ProtectedRoute>
+                    <ErrorBoundary>
+                      <Bookings />
                     </ErrorBoundary>
                   </ProtectedRoute>
                 }

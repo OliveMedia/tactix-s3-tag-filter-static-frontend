@@ -8,6 +8,7 @@ import {
   ScrollArea,
 } from "@mantine/core";
 import {
+  IconBook,
   IconLogout,
   IconMessage,
   IconSettings,
@@ -18,6 +19,11 @@ import { useLocation } from "react-router-dom";
 const menuItems = [
   { icon: IconUsers, label: "Users", link: "/" },
   { icon: IconUsers, label: "Logs", link: "/logs" },
+  {
+    icon: IconBook,
+    label: "Bookings",
+    link: "/bookings",
+  },
   {
     icon: IconSettings,
     label: "Settings",
