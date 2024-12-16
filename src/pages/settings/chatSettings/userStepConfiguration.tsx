@@ -1,4 +1,4 @@
-import { AsyncSelect } from "@/components";
+import { ValidatedAsyncSelect } from "@/components";
 import { useActionOnData } from "@/hooks";
 import { useGlobalStore } from "@/store";
 import { client } from "@/utils/api-client";
@@ -128,7 +128,7 @@ const UserStepConfiguration = ({
           .then(() => setSelectedItemForEdit(null))
       )}
     >
-      <AsyncSelect
+      <ValidatedAsyncSelect
         label="Select User"
         placeholder="Select User"
         fetchOptions={fetchOptions}
@@ -138,7 +138,7 @@ const UserStepConfiguration = ({
         searchable={true}
         name="user"
       />
-      <AsyncSelect
+      <ValidatedAsyncSelect
         label="Select Step"
         placeholder="Select Step"
         withAsterisk={true}

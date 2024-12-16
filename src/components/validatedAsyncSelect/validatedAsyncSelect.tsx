@@ -3,7 +3,7 @@ import { Combobox, Input, InputBase, Loader, useCombobox } from "@mantine/core";
 
 const searchDelay = 300; // Debounce delay in milliseconds
 
-const AsyncSelect = ({
+const ValidatedAsyncSelect = ({
   fetchOptions,
   form,
   name,
@@ -85,7 +85,7 @@ const AsyncSelect = ({
           onClick={() => combobox.toggleDropdown()}
           rightSectionPointerEvents="none"
         >
-          {form.getValues()[name]?.children || (
+          {form?.getValues()[name]?.children || (
             <Input.Placeholder>Select {name}</Input.Placeholder>
           )}
         </InputBase>
@@ -114,4 +114,4 @@ const AsyncSelect = ({
   );
 };
 
-export default AsyncSelect;
+export default ValidatedAsyncSelect;
