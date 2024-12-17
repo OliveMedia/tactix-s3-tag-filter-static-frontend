@@ -15,6 +15,7 @@ import { DateInput } from "@mantine/dates";
 import axios from "axios";
 import { useGlobalStore } from "@/store";
 import { AsyncSelect } from "@/components";
+import dayjs from "dayjs";
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -40,7 +41,7 @@ const Bookings = () => {
       <Table.Td>{index + 1}</Table.Td>
       <Table.Td>{booking.user.name}</Table.Td>
       <Table.Td>{booking.user.phone}</Table.Td>
-      <Table.Td>{booking.date}</Table.Td>
+      <Table.Td>{dayjs(booking.date).format("MMMM D, YYYY")}</Table.Td>
       <Table.Td>{booking.time}</Table.Td>
       <Table.Td>{booking.visit_location}</Table.Td>
       <Table.Td>{booking.location}</Table.Td>
@@ -164,8 +165,8 @@ const Bookings = () => {
             <Table.Th>Phone Number</Table.Th>
             <Table.Th>Booking Date</Table.Th>
             <Table.Th>Booking Time</Table.Th>
-            <Table.Th>City</Table.Th>
-            <Table.Th>Country</Table.Th>
+            <Table.Th>Vaccination Location</Table.Th>
+            <Table.Th>Destination Country</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody
