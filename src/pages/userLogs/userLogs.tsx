@@ -1,9 +1,14 @@
 import {
   Box,
+  Button,
+  Card,
+  Drawer,
   Flex,
+  Group,
   Image,
   Loader,
   Pagination,
+  rem,
   Select,
   Skeleton,
   Table,
@@ -15,14 +20,81 @@ import { useGlobalStore } from "@/store";
 import axios from "axios";
 import { useState } from "react";
 import { useGetUserLogs } from "./hooks";
+import { IconEye } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
 
 const baseURL = import.meta.env.VITE_API_URL;
+
+const Row = ({ logData }: any) => {
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const rows = logData?.rows?.map((log: any) => {
+    return (
+      <Table.Tr key={log.id}>
+        <Table.Td>{log.ACTION || "N/A"}</Table.Td>
+        <Table.Td>{log.USER_DETAILS.email || "N/A"}</Table.Td>
+        <Table.Td>{log.METHOD}</Table.Td>
+        <Table.Td>{log.RESPONSE_STATUS_CODE}</Table.Td>
+        <Table.Td>{log.RESPONSE_TIME.toFixed(4)} s</Table.Td>
+        <Table.Td>{new Date(log.created_at).toDateString()}</Table.Td>
+        <Table.Td>
+          <Drawer
+            size="50%"
+            opened={opened}
+            position="right"
+            onClose={close}
+            title="Log Detail"
+          >
+            <Group>
+              <Card shadow="sm" px="sm" py="sm" w="100%" radius="md" withBorder>
+                <Text>Device Info</Text>
+
+                <Text size="sm" c="dimmed">
+                  {log.DEVICE_INFO}
+                </Text>
+              </Card>
+              <Card shadow="sm" px="sm" py="sm" w="100%" radius="md" withBorder>
+                <Box>
+                  <Text>Request Body</Text>
+
+                  <Text size="sm" c="dimmed">
+                    {log.REQ_BODY ? log.REQ_BODY : "N/A"}
+                  </Text>
+                </Box>
+              </Card>
+              <Card shadow="sm" px="sm" py="sm" w="100%" radius="md" withBorder>
+                <Box>
+                  <Text>Url</Text>
+
+                  <Text size="sm" c="dimmed">
+                    {log.URL}
+                  </Text>
+                </Box>
+              </Card>
+            </Group>
+          </Drawer>
+
+          <Button
+            leftSection={
+              <IconEye style={{ width: rem(14), height: rem(14) }} />
+            }
+            variant="transparent"
+            onClick={open}
+          >
+            View Details
+          </Button>
+        </Table.Td>
+      </Table.Tr>
+    );
+  });
+
+  return rows;
+};
 
 const UserLogs = () => {
   const {
     logData,
     totalPages,
-    action,
     setAction,
     setCurrentPage,
     currentPage,
@@ -34,22 +106,6 @@ const UserLogs = () => {
   const [isActionLoading, setIsActionLoading] = useState(false);
 
   const { token } = useGlobalStore();
-
-  const rows = logData?.rows?.map((log: any) => {
-    return (
-      <Table.Tr key={log.id}>
-        <Table.Td>{log.ACTION}</Table.Td>
-        <Table.Td>{log.USER_DETAILS.email || "N/A"}</Table.Td>
-        <Table.Td>{log.DEVICE_INFO || "N/A"}</Table.Td>
-        <Table.Td>{log.METHOD}</Table.Td>
-        <Table.Td>{log.REQ_BODY || "N/A"}</Table.Td>
-        <Table.Td>{log.RESPONSE_STATUS_CODE}</Table.Td>
-        <Table.Td>{log.RESPONSE_TIME.toFixed(4)} s</Table.Td>
-        <Table.Td>{log.URL}</Table.Td>
-        <Table.Td>{new Date(log.created_at).toDateString()}</Table.Td>
-      </Table.Tr>
-    );
-  });
 
   const fetchOptions = async () => {
     try {
@@ -105,12 +161,9 @@ const UserLogs = () => {
           <Table.Tr>
             <Table.Th>Action</Table.Th>
             <Table.Th>User</Table.Th>
-            <Table.Th>Device Info</Table.Th>
             <Table.Th>Method</Table.Th>
-            <Table.Th>Request Body</Table.Th>
             <Table.Th>Status Code</Table.Th>
             <Table.Th>Response Time</Table.Th>
-            <Table.Th>Url</Table.Th>
             <Table.Th>CreatedAt</Table.Th>
           </Table.Tr>
         </Table.Thead>
@@ -118,7 +171,7 @@ const UserLogs = () => {
           {isLoading ? (
             rowsSkeletonLoader
           ) : logData && logData?.rows?.length > 0 ? (
-            rows
+            <Row logData={logData} />
           ) : (
             <Box
               w="100%"
