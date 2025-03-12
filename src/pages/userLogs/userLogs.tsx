@@ -44,6 +44,7 @@ const Row = ({ logData }: any) => {
             position="right"
             onClose={close}
             title="Log Detail"
+            overlayProps={{ backgroundOpacity: 0.1, blur: 0.5 }}
           >
             <Group>
               <Card shadow="sm" px="sm" py="sm" w="100%" radius="md" withBorder>
