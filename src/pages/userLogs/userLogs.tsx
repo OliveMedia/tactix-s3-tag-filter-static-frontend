@@ -11,6 +11,7 @@ import {
   rem,
   Select,
   Skeleton,
+  Stack,
   Table,
   Text,
 } from "@mantine/core";
@@ -46,15 +47,62 @@ const Row = ({ logData }: any) => {
             title="Log Detail"
             overlayProps={{ backgroundOpacity: 0.1, blur: 0.5 }}
           >
-            <Group>
-              <Card shadow="sm" px="sm" py="sm" w="100%" radius="md" withBorder>
-                <Text>Device Info</Text>
+            <Card shadow="sm" px="sm" py="sm" w="100%" radius="md" withBorder>
+              <Stack>
+                <Box>
+                  <Text>Action</Text>
 
-                <Text size="sm" c="dimmed">
-                  {log.DEVICE_INFO}
-                </Text>
-              </Card>
-              <Card shadow="sm" px="sm" py="sm" w="100%" radius="md" withBorder>
+                  <Text size="sm" c="dimmed">
+                    {log.ACTION || "N/A"}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text>Auth Token</Text>
+
+                  <Text
+                    size="sm"
+                    c="dimmed"
+                    className="whitespace-break-spaces"
+                  >
+                    {log.AUTH_TOKEN || "N/A"}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text>Interceptor ID</Text>
+
+                  <Text size="sm" c="dimmed">
+                    {log.INTERCEPTOR_ID || "N/A"}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text>Method</Text>
+
+                  <Text size="sm" c="dimmed">
+                    {log.METHOD || "N/A"}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text>Response</Text>
+
+                  <Text size="sm" c="dimmed">
+                    {log.RESPONSE_BODY || "N/A"}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text>Status Code</Text>
+
+                  <Text size="sm" c="dimmed">
+                    {log.RESPONSE_STATUS_CODE || "N/A"}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text>Device Info</Text>
+
+                  <Text size="sm" c="dimmed">
+                    {log.DEVICE_INFO || "N/A"}
+                  </Text>
+                </Box>
+
                 <Box>
                   <Text>Request Body</Text>
 
@@ -62,17 +110,15 @@ const Row = ({ logData }: any) => {
                     {log.REQ_BODY ? log.REQ_BODY : "N/A"}
                   </Text>
                 </Box>
-              </Card>
-              <Card shadow="sm" px="sm" py="sm" w="100%" radius="md" withBorder>
                 <Box>
                   <Text>Url</Text>
 
                   <Text size="sm" c="dimmed">
-                    {log.URL}
+                    {log.URL || "N/A"}
                   </Text>
                 </Box>
-              </Card>
-            </Group>
+              </Stack>
+            </Card>
           </Drawer>
 
           <Button
