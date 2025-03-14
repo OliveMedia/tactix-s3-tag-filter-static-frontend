@@ -34,6 +34,7 @@ const Row = ({ logData }: any) => {
       <Table.Tr key={log.id}>
         <Table.Td>{log.ACTION || "N/A"}</Table.Td>
         <Table.Td>{log.USER_DETAILS.email || "N/A"}</Table.Td>
+        <Table.Td>{log.USER_DETAILS.phone || "N/A"}</Table.Td>
         <Table.Td>{log.METHOD}</Table.Td>
         <Table.Td>{log.RESPONSE_STATUS_CODE}</Table.Td>
         <Table.Td>{log.RESPONSE_TIME.toFixed(4)} s</Table.Td>
@@ -207,7 +208,8 @@ const UserLogs = () => {
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Action</Table.Th>
-            <Table.Th>User</Table.Th>
+            <Table.Th>Email</Table.Th>
+            <Table.Th>Phone Number</Table.Th>
             <Table.Th>Method</Table.Th>
             <Table.Th>Status Code</Table.Th>
             <Table.Th>Response Time</Table.Th>
