@@ -6,6 +6,7 @@ import { useGlobalStore } from "@/store";
 
 function useGetUserLogs() {
   const [logData, setLogData] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
   const [action, setAction] = useState<any>("");
 
   const [searchValue, setSearchValue] = useState("");
@@ -27,12 +28,17 @@ function useGetUserLogs() {
     pageLimit: number;
     searchValue: string;
   }) => {
-    const params = {
+    const params: any = {
       page: currentPage,
       limit: pageLimit,
-      //   search_key: searchValue,
-      action,
     };
+    if (action) {
+      params.action = action;
+    }
+
+    if (user) {
+      params.user = user.value;
+    }
 
     return client({
       method: "get",
@@ -45,7 +51,7 @@ function useGetUserLogs() {
   };
 
   const { data, error, isLoading, isSuccess, isError, isFetching } = useQuery({
-    queryKey: ["logs", { currentPage, searchValue, action }],
+    queryKey: ["logs", { currentPage, searchValue, action, user }],
     queryFn: () => getLogs({ currentPage, pageLimit, searchValue }),
   });
 
@@ -87,6 +93,8 @@ function useGetUserLogs() {
     searchValue,
     action,
     setAction,
+    user,
+    setUser,
   };
 }
 

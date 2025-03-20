@@ -23,6 +23,7 @@ import { useState } from "react";
 import { useGetUserLogs } from "./hooks";
 import { IconEye } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
+import { AsyncSelect } from "@/components";
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -147,6 +148,8 @@ const UserLogs = () => {
     setCurrentPage,
     currentPage,
     isLoading,
+    user,
+    setUser,
   } = useGetUserLogs();
 
   const [hasFetched, setHasFetched] = useState(false);
@@ -154,6 +157,29 @@ const UserLogs = () => {
   const [isActionLoading, setIsActionLoading] = useState(false);
 
   const { token } = useGlobalStore();
+
+  // Function to fetch options from API
+  const fetchUsers = async (searchQuery?: string) => {
+    try {
+      // Replace with your actual API endpoint
+      const response = await axios.get(`${baseURL}/superadmin/users`, {
+        headers: {
+          token,
+        },
+        params: {
+          search_key: searchQuery,
+          limit: 10,
+        },
+      });
+      // Assuming API returns data in format: [{ value: '1', label: 'Option 1' }]
+      return response.data.data.users.map((user: any) => ({
+        value: user.id,
+        label: user?.name || "N/A",
+      }));
+    } catch (error) {
+      console.error("Error fetching options:", error);
+    }
+  };
 
   const fetchOptions = async () => {
     try {
@@ -184,20 +210,32 @@ const UserLogs = () => {
   ));
   return (
     <Flex direction="column" align="end" gap="lg">
-      <Select
-        data={actions}
-        onDropdownOpen={() => {
-          if (!hasFetched) {
-            fetchOptions();
-          }
-        }}
-        onChange={(value) => setAction(value)}
-        placeholder="Select Action"
-        searchable
-        nothingFoundMessage={isActionLoading ? "Loading..." : "Nothing found"}
-        clearable
-        rightSection={isActionLoading && <Loader size="xs" />}
-      />
+      <Group>
+        <AsyncSelect
+          placeholder="Select User"
+          fetchOptions={fetchUsers}
+          clearable
+          searchable={true}
+          name="user"
+          value={user}
+          setValue={setUser}
+        />
+        <Select
+          data={actions}
+          onDropdownOpen={() => {
+            if (!hasFetched) {
+              fetchOptions();
+            }
+          }}
+          onChange={(value) => setAction(value)}
+          placeholder="Select Action"
+          searchable
+          nothingFoundMessage={isActionLoading ? "Loading..." : "Nothing found"}
+          clearable
+          rightSection={isActionLoading && <Loader size="xs" />}
+        />
+      </Group>
+
       <Table
         verticalSpacing="lg"
         striped
