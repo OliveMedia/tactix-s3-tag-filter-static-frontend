@@ -2,6 +2,8 @@ import NoDataImage from "../../assets/images/nodata.svg";
 
 import {
   Box,
+  Button,
+  Drawer,
   Flex,
   Group,
   Image,
@@ -16,8 +18,76 @@ import axios from "axios";
 import { useGlobalStore } from "@/store";
 import { AsyncSelect } from "@/components";
 import dayjs from "dayjs";
+import { IconCalendar } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
 
 const baseURL = import.meta.env.VITE_API_URL;
+
+const Rows = ({ booking }: any) => {
+  const [opened, { open, close }] = useDisclosure(false);
+
+  return (
+    <Table.Tr key={booking.id}>
+      <Table.Td className="capitalize">{`${booking.user_type} booking`}</Table.Td>
+      <Table.Td className="capitalize">{booking.user.name}</Table.Td>
+      <Table.Td className="capitalize">{booking.user.phone}</Table.Td>
+
+      <Table.Td>{dayjs(booking.date).format("MMMM D, YYYY")}</Table.Td>
+      <Table.Td>
+        {booking.user_type === "group" ? (
+          <>
+            <Drawer
+              opened={opened}
+              onClose={close}
+              title={
+                <Group gap="xs">
+                  <IconCalendar size={16} />
+                  <Text>Bookings</Text>
+                </Group>
+              }
+              position="right"
+            >
+              <ul className="mt-4 space-y-2">
+                {booking.members.map((member: any, index: number) => (
+                  <li key={index} className="flex items-start space-x-2">
+                    <Text>{index + 1}.</Text>
+                    <Box>
+                      <Text fw="normal" className="capitalize">
+                        {member.details.name}{" "}
+                        <span className="text-sm lowercase">
+                          ({member.details.email})
+                        </span>
+                      </Text>
+                      <Group>
+                        <Text size="sm">
+                          {dayjs(booking.date).format("MMMM D, YYYY")}
+                        </Text>
+                        |<Text size="sm">{member.time}</Text>
+                      </Group>
+                    </Box>
+                  </li>
+                ))}
+              </ul>
+            </Drawer>
+
+            <Button
+              variant="transparent"
+              className="text-sky-400 underline underline-offset-4"
+              onClick={open}
+            >
+              View all appointments
+            </Button>
+          </>
+        ) : (
+          booking.time
+        )}
+      </Table.Td>
+      <Table.Td>{booking.location}</Table.Td>
+      <Table.Td>{booking.visit_location}</Table.Td>
+      <Table.Td>{dayjs(booking.created_at).format("MMMM D, YYYY")}</Table.Td>
+    </Table.Tr>
+  );
+};
 
 const Bookings = () => {
   const {
@@ -37,33 +107,7 @@ const Bookings = () => {
   const { token } = useGlobalStore();
 
   const rows = bookingData?.rows?.map((booking: any, index: number) => (
-    <Table.Tr key={booking.id}>
-      <Table.Td>{index + 1}</Table.Td>
-      <Table.Td>{booking.user.name}</Table.Td>
-      <Table.Td>{booking.user.phone}</Table.Td>
-      <Table.Td>{dayjs(booking.date).format("MMMM D, YYYY")}</Table.Td>
-      <Table.Td>{booking.time}</Table.Td>
-      <Table.Td>{booking.visit_location}</Table.Td>
-      <Table.Td>{booking.location}</Table.Td>
-
-      {/* <Table.Td>
-        <Menu shadow="md" width={200}>
-          <Menu.Target>
-            <IconDots className="cursor-pointer" />
-          </Menu.Target>
-
-          <Menu.Dropdown>
-            <Menu.Item
-              leftSection={
-                <IconEye style={{ width: rem(14), height: rem(14) }} />
-              }
-            >
-              View Details
-            </Menu.Item>
-          </Menu.Dropdown>
-        </Menu>
-      </Table.Td> */}
-    </Table.Tr>
+    <Rows booking={booking} key={index} />
   ));
 
   const rowsSkeletonLoader = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
@@ -160,13 +204,14 @@ const Bookings = () => {
       >
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>S.N</Table.Th>
-            <Table.Th>User</Table.Th>
-            <Table.Th>Phone Number</Table.Th>
-            <Table.Th>Booking Date</Table.Th>
-            <Table.Th>Booking Time</Table.Th>
+            <Table.Th>Type</Table.Th>
+            <Table.Th>User Name</Table.Th>
+            <Table.Th>User Phone</Table.Th>
+            <Table.Th>Appointment Date</Table.Th>
+            <Table.Th>Appointment Time</Table.Th>
+            <Table.Th>Destination Countries</Table.Th>
             <Table.Th>Vaccination Location</Table.Th>
-            <Table.Th>Destination Country</Table.Th>
+            <Table.Th>Booked On</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody
