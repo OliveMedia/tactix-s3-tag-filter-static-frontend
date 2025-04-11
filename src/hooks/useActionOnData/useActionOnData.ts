@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
 
 interface IActionOnDataProps {
-  actionFunction: any;
+  actionFunction: (data: any) => Promise<any>;
   navigateTo?: string;
   queryToBeInvalidated: string[];
 }
