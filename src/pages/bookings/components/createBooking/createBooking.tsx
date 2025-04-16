@@ -11,7 +11,7 @@ const baseURL = import.meta.env.VITE_API_URL;
 interface IFormValue {
   user: any;
   location: string;
-  // type: string;
+  type: string;
 }
 
 const CreateBooking = ({ close }: any) => {
@@ -45,14 +45,14 @@ const CreateBooking = ({ close }: any) => {
     initialValues: {
       user: null,
       location: "",
-      // type: "",
+      type: "",
     },
     validateInputOnChange: true,
     validateInputOnBlur: true,
     validate: {
       user: (value) => (value ? null : "User cannot be empty"),
       location: (value) => (value ? null : "Location cannot be empty"),
-      // type: (value) => (value ? null : "Type cannot be empty"),
+      type: (value) => (value ? null : "Type cannot be empty"),
     },
   });
 
@@ -60,7 +60,7 @@ const CreateBooking = ({ close }: any) => {
     const apiBody = {
       visit_location: data["location"],
       user_id: data["user"].value,
-      // type: data["type"],
+      user_type: data["type"],
     };
 
     return client({
@@ -93,23 +93,25 @@ const CreateBooking = ({ close }: any) => {
         form={form}
         searchable={true}
         name="user"
+        withAsterisk
       />
 
       <TextInput
         label="Enter location"
         placeholder="Enter location"
         key={form.key("location")}
+        withAsterisk
         {...form.getInputProps("location")}
       />
-      {/* <Select
+      <Select
         label="Select Type"
         placeholder="Select Type"
         data={["alone", "group"]}
         clearable
         withAsterisk
-        key={form.key("step")}
-        {...form.getInputProps("step")}
-      /> */}
+        key={form.key("type")}
+        {...form.getInputProps("type")}
+      />
       <Group justify="flex-end" mt="md">
         <Button
           type="submit"
