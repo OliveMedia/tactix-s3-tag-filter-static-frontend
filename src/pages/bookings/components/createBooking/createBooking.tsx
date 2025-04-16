@@ -2,23 +2,19 @@ import { ValidatedAsyncSelect } from "@/components";
 import { useActionOnData } from "@/hooks";
 import { useGlobalStore } from "@/store";
 import { client } from "@/utils/api-client";
-import { Button, Checkbox, Group, TextInput } from "@mantine/core";
+import { Button, Checkbox, Group, Select, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import axios from "axios";
-import { useEffect } from "react";
 
 const baseURL = import.meta.env.VITE_API_URL;
 
 interface IFormValue {
   user: any;
   location: string;
+  // type: string;
 }
 
-const CreateBooking = ({
-  selectedItemForEdit,
-  setSelectedItemForEdit,
-  close,
-}: any) => {
+const CreateBooking = ({ close }: any) => {
   const { token } = useGlobalStore();
 
   // Function to fetch options from API
@@ -49,31 +45,22 @@ const CreateBooking = ({
     initialValues: {
       user: null,
       location: "",
+      // type: "",
     },
     validateInputOnChange: true,
     validateInputOnBlur: true,
     validate: {
       user: (value) => (value ? null : "User cannot be empty"),
       location: (value) => (value ? null : "Location cannot be empty"),
+      // type: (value) => (value ? null : "Type cannot be empty"),
     },
   });
-
-  useEffect(() => {
-    if (selectedItemForEdit) {
-      form.setValues({
-        user: {
-          children: selectedItemForEdit?.user?.name,
-          value: selectedItemForEdit?.user?.id,
-        },
-        location: selectedItemForEdit?.location,
-      });
-    }
-  }, [selectedItemForEdit]);
 
   const createBooking = (data: any) => {
     const apiBody = {
       visit_location: data["location"],
       user_id: data["user"].value,
+      // type: data["type"],
     };
 
     return client({
@@ -95,16 +82,13 @@ const CreateBooking = ({
     <form
       className="flex flex-col space-y-5"
       onSubmit={form.onSubmit((values: any) =>
-        mutateAsync(values)
-          .then(() => close())
-          .then(() => setSelectedItemForEdit(null))
+        mutateAsync(values).then(() => close())
       )}
     >
       <ValidatedAsyncSelect
         label="Select User"
         placeholder="Select User"
         fetchOptions={fetchOptions}
-        disabled={selectedItemForEdit}
         clearable
         form={form}
         searchable={true}
@@ -117,7 +101,15 @@ const CreateBooking = ({
         key={form.key("location")}
         {...form.getInputProps("location")}
       />
-
+      {/* <Select
+        label="Select Type"
+        placeholder="Select Type"
+        data={["alone", "group"]}
+        clearable
+        withAsterisk
+        key={form.key("step")}
+        {...form.getInputProps("step")}
+      /> */}
       <Group justify="flex-end" mt="md">
         <Button
           type="submit"

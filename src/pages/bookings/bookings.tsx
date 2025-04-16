@@ -58,7 +58,7 @@ const Rows = ({ booking }: any) => {
 
   const handleDelete = () => {
     mutateAsync({
-      id: booking.id,
+      id: booking.conv_id,
       token,
     }).then(() => setOpenDeleteBox(false));
   };
@@ -122,53 +122,55 @@ const Rows = ({ booking }: any) => {
       <Table.Td>{booking.visit_location}</Table.Td>
       <Table.Td>{dayjs(booking.created_at).format("MMMM D, YYYY")}</Table.Td>
       <Table.Td>
-        <Menu shadow="md" width={200}>
-          <Menu.Target>
-            <IconDots className="cursor-pointer" />
-          </Menu.Target>
+        {booking.conv_id && (
+          <Menu shadow="md" width={200}>
+            <Menu.Target>
+              <IconDots className="cursor-pointer" />
+            </Menu.Target>
 
-          <Menu.Dropdown>
-            <Menu.Item
-              leftSection={
-                <IconTrash style={{ width: rem(14), height: rem(14) }} />
-              }
-              onClick={() => setOpenDeleteBox(true)}
-            >
-              Delete
-            </Menu.Item>
-          </Menu.Dropdown>
-          <Modal
-            opened={openDeleteBox}
-            onClose={() => setOpenDeleteBox(false)}
-            withCloseButton={false}
-          >
-            <Text mb="md">Delete Booking</Text>
-            <Text size="sm" mb="md">
-              Are you sure you want to delete the booking? This action cannot be
-              undone.
-            </Text>
-            <Group justify="flex-end">
-              <Button
-                variant="outline"
-                color="white"
-                disabled={isPending}
-                onClick={() => setOpenDeleteBox(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="filled"
-                color="red"
-                onClick={handleDelete}
-                disabled={isPending}
-                loading={isPending}
-                loaderProps={{ type: "oval" }}
+            <Menu.Dropdown>
+              <Menu.Item
+                leftSection={
+                  <IconTrash style={{ width: rem(14), height: rem(14) }} />
+                }
+                onClick={() => setOpenDeleteBox(true)}
               >
                 Delete
-              </Button>
-            </Group>
-          </Modal>
-        </Menu>
+              </Menu.Item>
+            </Menu.Dropdown>
+            <Modal
+              opened={openDeleteBox}
+              onClose={() => setOpenDeleteBox(false)}
+              withCloseButton={false}
+            >
+              <Text mb="md">Delete Booking</Text>
+              <Text size="sm" mb="md">
+                Are you sure you want to delete the booking? This action cannot
+                be undone.
+              </Text>
+              <Group justify="flex-end">
+                <Button
+                  variant="outline"
+                  color="white"
+                  disabled={isPending}
+                  onClick={() => setOpenDeleteBox(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="filled"
+                  color="red"
+                  onClick={handleDelete}
+                  disabled={isPending}
+                  loading={isPending}
+                  loaderProps={{ type: "oval" }}
+                >
+                  Delete
+                </Button>
+              </Group>
+            </Modal>
+          </Menu>
+        )}
       </Table.Td>
     </Table.Tr>
   );
@@ -191,8 +193,6 @@ const Bookings = () => {
 
   const { token } = useGlobalStore();
   const [opened, { open, close }] = useDisclosure(false);
-
-  const [selectedItemForEdit, setSelectedItemForEdit] = useState(null);
 
   const rows = bookingData?.rows?.map((booking: any, index: number) => (
     <Rows booking={booking} key={index} />
@@ -345,15 +345,10 @@ const Bookings = () => {
         opened={opened}
         onClose={() => {
           close();
-          setSelectedItemForEdit(null);
         }}
         title="Create Booking"
       >
-        <CreateBooking
-          close={close}
-          selectedItemForEdit={selectedItemForEdit}
-          setSelectedItemForEdit={setSelectedItemForEdit}
-        />
+        <CreateBooking close={close} />
       </Modal>
     </>
   );
