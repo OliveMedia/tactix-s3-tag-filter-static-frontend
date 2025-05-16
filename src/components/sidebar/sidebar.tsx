@@ -11,6 +11,8 @@ import {
   IconBook,
   IconLogout,
   IconMessage,
+  IconPuzzle,
+  IconQuestionMark,
   IconSettings,
   IconUsers,
 } from "@tabler/icons-react";
@@ -23,6 +25,11 @@ const menuItems = [
     icon: IconBook,
     label: "Bookings",
     link: "/bookings",
+  },
+  {
+    icon: IconPuzzle,
+    label: "Questions",
+    link: "/questions",
   },
   {
     icon: IconSettings,
@@ -72,9 +79,9 @@ const Sidebar = ({ navigate, opened, toggle }: any) => {
   return (
     <Box className="flex flex-col justify-between  h-full" p="md">
       <Group>
-        <Group w="100%">
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+        <Group w="100%" justify="space-between">
           <Code fw={700}>Vepa SuperAdmin</Code>
+          <Burger opened={opened} onClick={toggle} hiddenFrom="xl" size="sm" />
         </Group>
         <ScrollArea className="w-full" mt={10}>
           <Box className="space-y-5">{items}</Box>

@@ -31,6 +31,7 @@ const Conversations = lazy(
 
 const Logs = lazy(() => import("../src/pages/userLogs/userLogs"));
 const Bookings = lazy(() => import("../src/pages/bookings/bookings"));
+const Questions = lazy(() => import("../src/pages/questions/questions"));
 
 const theme = createTheme({
   // white: "#e5e5e5",
@@ -61,6 +62,16 @@ export default function App() {
                   <ProtectedRoute>
                     <ErrorBoundary>
                       <ChatSettings />
+                    </ErrorBoundary>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/questions"
+                element={
+                  <ProtectedRoute>
+                    <ErrorBoundary>
+                      <Questions />
                     </ErrorBoundary>
                   </ProtectedRoute>
                 }

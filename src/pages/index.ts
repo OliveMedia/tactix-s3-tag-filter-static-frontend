@@ -6,3 +6,4 @@ export { Conversations } from "./conversations";
 export { ChatSettings } from "./settings";
 export { UserLogs } from "./userLogs";
 export { Bookings } from "./bookings";
+export { Questions } from "./questions";

@@ -17,7 +17,7 @@ const Navbar = ({ opened, toggle, greeting }: any) => {
   return (
     <Group h="100%" px="md" justify="space-between">
       <Group>
-        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+        <Burger opened={opened} onClick={toggle} hiddenFrom="xl" size="sm" />
         <Text fw="bold">{`${greeting} Admin`}</Text>
       </Group>
       <Group>
