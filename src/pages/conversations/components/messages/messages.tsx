@@ -4,6 +4,7 @@ import { Box, Center, Skeleton } from "@mantine/core";
 
 import ReactMarkdown from "react-markdown";
 import { InfiniteScroller } from "../../../../components";
+import { HtmlParser } from "../htmlParser";
 
 const Messages = ({ conversationId }: { conversationId: string }) => {
   const { messages, fetchNextPage, hasNextPage, isLoading } = useGetMessages({
@@ -33,9 +34,7 @@ const Messages = ({ conversationId }: { conversationId: string }) => {
             <div className="flex space-x-5 w-full">
               <div>
                 {message.message.includes("\n") ? (
-                  <ReactMarkdown className="prose dark:prose-invert dark:prose-dark">
-                    {message.message}
-                  </ReactMarkdown>
+                  <HtmlParser html={message?.message} />
                 ) : (
                   <span>{message.message}</span>
                 )}
