@@ -54,7 +54,7 @@ const ChatHistory = ({
           height: "calc(100vh - 120px)",
           overflowY: "auto",
           overflowX: "hidden",
-          width: "250px",
+          maxWidth: "250px",
         }}
       >
         <div ref={scrollRef} />

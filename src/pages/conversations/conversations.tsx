@@ -6,7 +6,7 @@ const Users = () => {
   const [conversationId, setConversationId] = useState("");
   return (
     <ScrollArea>
-      <div className="flex flex-col items-end text-text overflow-hidden h-[calc(100vh-170px)]">
+      <div className="flex flex-col items-end text-text overflow-hidden h-[calc(100vh-153px)]">
         <Grid w="100%">
           <Grid.Col span={2}>
             <ChatHistory
