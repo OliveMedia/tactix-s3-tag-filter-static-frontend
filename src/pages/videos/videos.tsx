@@ -55,7 +55,7 @@ const Users = () => {
             {tags.length > 0
               ? tags.map((value: any, index) => (
                   <Badge key={index} tt="none">
-                    {value[0]}:{value[1]}
+                    {value[0]}: {value[1] ? value[1] : "N/A"}
                   </Badge>
                 ))
               : "N/A"}
