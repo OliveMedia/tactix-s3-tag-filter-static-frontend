@@ -3,58 +3,55 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { client } from "@/utils/api-client";
 import { useGlobalStore } from "@/store";
-import { isTokenExpired } from "@/utils/isTokenExpired";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import { notifications } from "@mantine/notifications";
 
-function useGetUsers() {
-  const [userData, setUserData] = useState<any>(null);
+function useGetVideos() {
+  const [videoData, setVideoData] = useState<any>(null);
 
   const [searchValue, setSearchValue] = useState("");
 
-  const [totalPages, setTotalPages] = useState(2);
+  const [totalPages, setTotalPages] = useState(0);
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [pageLimit] = useState(10);
+  const [pageLimit] = useState(5);
 
-  const { token } = useGlobalStore();
-
-  const navigate = useNavigate();
+  const { token, videoFilter } = useGlobalStore();
 
   const getUserList = ({
     currentPage,
     pageLimit,
-    searchValue,
+    videoFilter,
   }: {
     currentPage: number;
     pageLimit: number;
-    searchValue: string;
+    videoFilter: any;
   }) => {
-    const params = {
+    const params: any = {
       page: currentPage,
-      limit: pageLimit,
-      search_key: searchValue,
+      pageSize: pageLimit,
     };
 
+    if (videoFilter) {
+      params.filter = videoFilter;
+    }
+
     return client({
-      method: "get",
-      endpoint: "superadmin/users",
+      method: "post",
+      endpoint: "v1/getClipsTag",
       optional: {
-        token,
-        params,
+        data: params,
       },
     });
   };
 
   const { data, error, isLoading, isSuccess, isError, isFetching } = useQuery({
-    queryKey: ["users", { currentPage, searchValue }],
-    queryFn: () => getUserList({ currentPage, pageLimit, searchValue }),
-    enabled: false,
+    queryKey: ["videos", { currentPage, videoFilter }],
+    queryFn: () => getUserList({ currentPage, pageLimit, videoFilter }),
   });
 
   useEffect(() => {
-    const allUserList: any[] = [
+    const allVideoList: any[] = [
       {
         _id: "6849219b8f9a189bf84aeee6",
         bucket: "tactix-data-read-write",
@@ -142,8 +139,8 @@ function useGetUsers() {
       },
     ];
 
-    setUserData({
-      rows: allUserList,
+    setVideoData({
+      rows: allVideoList,
       totalPages,
     });
   }, []);
@@ -157,7 +154,7 @@ function useGetUsers() {
   return {
     isSuccess,
     isLoading,
-    userData,
+    videoData,
     error,
     isError,
     totalPages,
@@ -170,4 +167,4 @@ function useGetUsers() {
   };
 }
 
-export { useGetUsers };
+export { useGetVideos };

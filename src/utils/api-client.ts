@@ -34,7 +34,9 @@ async function client({
     data: data ? (dontStringify ? data : JSON.stringify(data)) : undefined,
     baseURL: baseURL,
     url: `/${endpoint}`,
+
     headers: {
+      "access-control--allow-origin": "*",
       token: token ? token : undefined,
       "Content-Type": data ? "application/json" : undefined,
       ...customHeaders,

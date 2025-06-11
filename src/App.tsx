@@ -17,7 +17,7 @@ const PageNotFound = lazy(
 
 const Login = lazy(() => import("../src/pages/login/login"));
 
-const Users = lazy(() => import("../src/pages/users/users"));
+const Videos = lazy(() => import("./pages/videos/videos"));
 
 const theme = createTheme({
   // white: "#e5e5e5",
@@ -48,7 +48,7 @@ export default function App() {
                 element={
                   <ProtectedRoute>
                     <ErrorBoundary>
-                      <Users />
+                      <Videos />
                     </ErrorBoundary>
                   </ProtectedRoute>
                 }

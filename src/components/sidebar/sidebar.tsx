@@ -1,3 +1,4 @@
+import { useGlobalStore } from "@/store";
 import {
   Box,
   Burger,
@@ -32,6 +33,7 @@ const initialTags = [
 const Sidebar = ({ navigate, opened, toggle }: any) => {
   const location = useLocation();
   const [tags, setTags] = useState(initialTags);
+  const { setVideoFilter } = useGlobalStore();
 
   const items = menuItems.map((item) => (
     <NavLink
@@ -59,7 +61,14 @@ const Sidebar = ({ navigate, opened, toggle }: any) => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log("Submitted data:", tags);
+    const result = tags
+      .filter((tag: any) => tag.value !== "")
+      .reduce((acc: any, tag) => {
+        acc[tag.tagName] = tag.value;
+        return acc;
+      }, {});
+    console.log("Submitted data:", result);
+    setVideoFilter(result);
     // You can send `tags` to a backend API or use it as needed.
   };
 
