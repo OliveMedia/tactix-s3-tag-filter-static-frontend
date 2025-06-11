@@ -51,7 +51,7 @@ const Login = () => {
         setIsLoading(true); // 🔹 Start loading
 
         if (
-          values.email === "admin@yopmail.com" &&
+          values.email === "kigan.khadka+admin@olivegroup.io" &&
           values.password === "adminPassword@1"
         ) {
           setTimeout(() => {
