@@ -35,9 +35,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <AppShell.Navbar>
         <SideBar navigate={navigate} opened={opened} toggle={toggle} />
       </AppShell.Navbar>
-      <AppShell.Main>
-        <Box h="calc(100vh - 80px)">{children}</Box>
-      </AppShell.Main>
+      <AppShell.Main>{children}</AppShell.Main>
     </AppShell>
   );
 };

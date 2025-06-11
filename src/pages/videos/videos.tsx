@@ -78,7 +78,7 @@ const Users = () => {
     </Table.Tr>
   ));
   return (
-    <Flex direction="column" align="end" gap="lg">
+    <Flex direction="column" align="end" gap="lg" h="calc(100vh - 100px)">
       <Group justify="flex-start" w="100%">
         <Text>Total Videos:</Text>
         <Text>{videoData?.totalCount}</Text>
