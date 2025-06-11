@@ -8,15 +8,10 @@ const baseURL = import.meta.env.VITE_API_URL;
 function useGetVideos() {
   const [videoData, setVideoData] = useState<any>(null);
 
-  const [searchValue, setSearchValue] = useState("");
-
   const [totalPages, setTotalPages] = useState(0);
 
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const [pageLimit, setPageLimit] = useState(20);
-
-  const { token, videoFilter } = useGlobalStore();
+  const { currentPage, pageLimit, setCurrentPage, setPageLimit, videoFilter } =
+    useGlobalStore();
 
   const getUserList = ({
     currentPage,
@@ -74,8 +69,6 @@ function useGetVideos() {
     isFetching,
     setCurrentPage,
     currentPage,
-    setSearchValue,
-    searchValue,
     setPageLimit,
     pageLimit,
   };

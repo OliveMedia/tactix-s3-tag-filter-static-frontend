@@ -33,7 +33,7 @@ const initialTags = [
 const Sidebar = ({ navigate, opened, toggle }: any) => {
   const location = useLocation();
   const [tags, setTags] = useState(initialTags);
-  const { setVideoFilter } = useGlobalStore();
+  const { setVideoFilter, setCurrentPage, setPageLimit } = useGlobalStore();
 
   const items = menuItems.map((item) => (
     <NavLink
@@ -68,6 +68,8 @@ const Sidebar = ({ navigate, opened, toggle }: any) => {
         return acc;
       }, {});
     console.log("Submitted data:", result);
+    setCurrentPage(1);
+    setPageLimit(20);
     setVideoFilter(result);
     // You can send `tags` to a backend API or use it as needed.
   };
@@ -90,26 +92,30 @@ const Sidebar = ({ navigate, opened, toggle }: any) => {
           </Code>
           <Burger opened={opened} onClick={toggle} hiddenFrom="xl" size="sm" />
         </Group>
-        <ScrollArea mt="lg">
-          {tags.map((tag) => (
-            <Card key={tag.id}>
-              <Group justify="space-between">
-                <Text className="capitalize">{tag.title}</Text>
-                <TextInput
-                  onChange={(e) => handleChangeTag(tag.id, e.target.value)}
-                  placeholder="Enter Tag Value"
-                />
-              </Group>
-            </Card>
-          ))}
-        </ScrollArea>
-        <Button
-          leftSection={<IconFilter size={14} />}
-          onClick={handleSubmit}
-          className="justify-end"
-        >
-          Submit
-        </Button>
+        <form onSubmit={handleSubmit}>
+          <ScrollArea mt="lg">
+            {tags.map((tag) => (
+              <Card key={tag.id}>
+                <Group justify="space-between">
+                  <Text className="capitalize">{tag.title}</Text>
+                  <TextInput
+                    onChange={(e) => handleChangeTag(tag.id, e.target.value)}
+                    placeholder="Enter Tag Value"
+                  />
+                </Group>
+              </Card>
+            ))}
+          </ScrollArea>
+          <Button
+            leftSection={<IconFilter size={14} />}
+            className="justify-end"
+            type="submit"
+            w="100%"
+            mt="md"
+          >
+            Submit
+          </Button>
+        </form>
       </Stack>
       <Stack>
         <Button
