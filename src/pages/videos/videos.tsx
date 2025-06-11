@@ -79,9 +79,24 @@ const Users = () => {
   ));
   return (
     <Flex direction="column" align="end" gap="lg" h="calc(100vh - 100px)">
-      <Group justify="flex-start" w="100%">
-        <Text>Total Videos:</Text>
-        <Text>{videoData?.totalCount}</Text>
+      <Group justify="space-between" w="100%">
+        <Group justify="flex-start">
+          <Text>Total Videos:</Text>
+          <Text>{videoData?.totalCount}</Text>
+        </Group>
+        <Group justify="flex-end">
+          <Select
+            data={["20", "50", "100", "500", "1000"]}
+            placeholder="Select Limit"
+            onChange={(value) => setPageLimit(parseInt(value as string))}
+            value={String(pageLimit)}
+          />
+          <Pagination
+            total={totalPages}
+            value={currentPage}
+            onChange={setCurrentPage}
+          />
+        </Group>
       </Group>
       <ScrollArea h="calc(100vh - 100px)" w="100%">
         <Table
@@ -120,19 +135,6 @@ const Users = () => {
             )}
           </Table.Tbody>
         </Table>
-        <Group w="100%" justify="flex-end" mt="md">
-          <Select
-            data={["20", "50", "100", "500", "1000"]}
-            placeholder="Select Limit"
-            onChange={(value) => setPageLimit(parseInt(value as string))}
-            value={String(pageLimit)}
-          />
-          <Pagination
-            total={totalPages}
-            value={currentPage}
-            onChange={setCurrentPage}
-          />
-        </Group>
       </ScrollArea>
     </Flex>
   );
