@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Card,
   Flex,
@@ -20,6 +21,7 @@ import { IconDots, IconEye } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { Search } from "@/components";
 import NoDataImage from "../../assets/images/nodata.svg";
+import dayjs from "dayjs";
 
 const Users = () => {
   const {
@@ -33,16 +35,35 @@ const Users = () => {
   } = useGetUsers();
 
   const navigate = useNavigate();
-  const rows = userData?.rows?.map((user: any) => (
-    <Table.Tr key={user.id}>
-      <Table.Td>{user.url}</Table.Td>
-      <Table.Td>{user.content_type}</Table.Td>
-      <Table.Td>{user.size}</Table.Td>
-      <Table.Td>{user.metadata}</Table.Td>
-      <Table.Td>{user.tags}</Table.Td>
-      <Table.Td>{user.last_modified}</Table.Td>
-    </Table.Tr>
-  ));
+  const rows = userData?.rows?.map((user: any) => {
+    const megabytes = user.size / (1024 * 1024);
+    const tags = Object.values(user.tags).filter((value) => value !== "");
+    console.log("user", tags);
+    return (
+      <Table.Tr key={user._id}>
+        <Table.Td>
+          {
+            <video width="200" controls>
+              <source src={user.url} type={user.content_type} />
+              Your browser does not support the video tag.
+            </video>
+          }
+        </Table.Td>
+        <Table.Td>{user.content_type}</Table.Td>
+        <Table.Td>{megabytes.toFixed(2)} MB</Table.Td>
+        <Table.Td>
+          {tags.length > 0
+            ? tags.map((value: any, index) => (
+                <Badge key={index}>{value}</Badge>
+              ))
+            : "N/A"}
+        </Table.Td>
+        <Table.Td>
+          {dayjs(user.last_modified).format("MMMM D, YYYY h:mm A")}
+        </Table.Td>
+      </Table.Tr>
+    );
+  });
 
   const rowsSkeletonLoader = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
     <Table.Tr key={item}>
@@ -66,7 +87,6 @@ const Users = () => {
           <Table.Th>Video</Table.Th>
           <Table.Th>Content Type</Table.Th>
           <Table.Th>Size</Table.Th>
-          <Table.Th>Metadata</Table.Th>
           <Table.Th>Tags</Table.Th>
           <Table.Th>Last Modified</Table.Th>
         </Table.Tr>

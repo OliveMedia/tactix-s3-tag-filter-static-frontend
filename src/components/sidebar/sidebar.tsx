@@ -12,24 +12,26 @@ import {
   TextInput,
 } from "@mantine/core";
 import { IconFilter, IconLogout, IconUsers } from "@tabler/icons-react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 const menuItems = [{ icon: IconUsers, label: "Users", link: "/" }];
 
-const tags = [
-  { id: 1, title: "personnel" },
-  { id: 2, title: "defensePersonnel" },
-  { id: 3, title: "playType" },
-  { id: 4, title: "playSubtype" },
-  { id: 5, title: "hash" },
-  { id: 6, title: "leftDistance" },
-  { id: 7, title: "LoS" },
-  { id: 8, title: "fieldSide" },
-  { id: 9, title: "fieldZone" },
+const initialTags = [
+  { id: 1, title: "Personnel", tagName: "personnel", value: "" },
+  { id: 2, title: "Defense Personnel", tagName: "defencePersonnel", value: "" },
+  { id: 3, title: "Play Type", tagName: "playType", value: "" },
+  { id: 4, title: "Play Subtype", tagName: "playSubType", value: "" },
+  { id: 5, title: "Hash", tagName: "hash", value: "" },
+  { id: 6, title: "Left Distance", tagName: "leftDistance", value: "" },
+  { id: 7, title: "LoS", tagName: "LoS", value: "" },
+  { id: 8, title: "Field Side", tagName: "fieldSide", value: "" },
+  { id: 9, title: "Field Zone", tagName: "fieldZone", value: "" },
 ];
 
 const Sidebar = ({ navigate, opened, toggle }: any) => {
   const location = useLocation();
+  const [tags, setTags] = useState(initialTags);
 
   const items = menuItems.map((item) => (
     <NavLink
@@ -43,9 +45,22 @@ const Sidebar = ({ navigate, opened, toggle }: any) => {
     />
   ));
 
+  const handleChangeTag = (id: number, newValue: string) => {
+    const updatedTags = tags.map((tag) =>
+      tag.id === id ? { ...tag, value: newValue } : tag
+    );
+    setTags(updatedTags);
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     window.location.replace("/login");
+  };
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    console.log("Submitted data:", tags);
+    // You can send `tags` to a backend API or use it as needed.
   };
 
   return (
@@ -63,12 +78,16 @@ const Sidebar = ({ navigate, opened, toggle }: any) => {
         <Code fw={700}>Video Explorer</Code>
         <Burger opened={opened} onClick={toggle} hiddenFrom="xl" size="sm" />
       </Group>
-      <ScrollArea>
+      <ScrollArea mt="md">
         {tags.map((tag) => (
           <Card key={tag.id}>
             <Group justify="space-between">
               <Text className="capitalize">{tag.title}</Text>
-              <TextInput className="w-full" />
+              <TextInput
+                onChange={(e) => handleChangeTag(tag.id, e.target.value)}
+                className="w-full"
+                placeholder="Enter Tag Value"
+              />
             </Group>
           </Card>
         ))}
@@ -76,7 +95,7 @@ const Sidebar = ({ navigate, opened, toggle }: any) => {
       <Stack>
         <Button
           leftSection={<IconFilter size={14} />}
-          onClick={handleLogout}
+          onClick={handleSubmit}
           className="justify-end"
         >
           Submit

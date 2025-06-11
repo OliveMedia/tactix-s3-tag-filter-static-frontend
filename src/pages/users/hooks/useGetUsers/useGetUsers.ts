@@ -12,7 +12,7 @@ function useGetUsers() {
 
   const [searchValue, setSearchValue] = useState("");
 
-  const [totalPages, setTotalPages] = useState(0);
+  const [totalPages, setTotalPages] = useState(2);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -50,121 +50,103 @@ function useGetUsers() {
   const { data, error, isLoading, isSuccess, isError, isFetching } = useQuery({
     queryKey: ["users", { currentPage, searchValue }],
     queryFn: () => getUserList({ currentPage, pageLimit, searchValue }),
+    enabled: false,
   });
 
   useEffect(() => {
-    if (isSuccess) {
-      const allUserList: any[] = [
-        [
-          {
-            _id: "6849219b8f9a189bf84aeee6",
-            bucket: "tactix-data-read-write",
-            key: "training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 001.mp4",
-            url: "https://tactix-data-read-write.s3.amazonaws.com/training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 001.mp4",
-            content_type: "video/mp4",
-            size: 21524130,
-            last_modified: "2025-06-09T17:43:17+00:00",
-            metadata: {},
-            tags: {
-              LoS: "",
-              leftDistance: "",
-              defensePersonnel: "",
-              playType: "",
-              fieldSide: "",
-              playSubType: "",
-              fieldZone: "",
-              personnel: "",
-              hash: "",
-            },
-          },
-          {
-            _id: "6849219c8f9a189bf84aeee7",
-            bucket: "tactix-data-read-write",
-            key: "training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 002.mp4",
-            url: "https://tactix-data-read-write.s3.amazonaws.com/training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 002.mp4",
-            content_type: "video/mp4",
-            size: 8756953,
-            last_modified: "2025-06-09T17:43:20+00:00",
-            metadata: {},
-            tags: {
-              LoS: "",
-              leftDistance: "",
-              defensePersonnel: "",
-              playType: "",
-              fieldSide: "",
-              playSubType: "",
-              fieldZone: "",
-              personnel: "",
-              hash: "",
-            },
-          },
-          {
-            _id: "6849219d8f9a189bf84aeee8",
-            bucket: "tactix-data-read-write",
-            key: "training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 003.mp4",
-            url: "https://tactix-data-read-write.s3.amazonaws.com/training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 003.mp4",
-            content_type: "video/mp4",
-            size: 8235423,
-            last_modified: "2025-06-09T17:43:22+00:00",
-            metadata: {},
-            tags: {
-              LoS: "",
-              leftDistance: "",
-              defensePersonnel: "",
-              playType: "",
-              fieldSide: "",
-              playSubType: "",
-              fieldZone: "",
-              personnel: "",
-              hash: "",
-            },
-          },
-          {
-            _id: "6849219d8f9a189bf84aeee9",
-            bucket: "tactix-data-read-write",
-            key: "training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 004.mp4",
-            url: "https://tactix-data-read-write.s3.amazonaws.com/training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 004.mp4",
-            content_type: "video/mp4",
-            size: 13174156,
-            last_modified: "2025-06-10T08:52:24+00:00",
-            metadata: {},
-            tags: {},
-          },
-          {
-            _id: "6849219e8f9a189bf84aeeea",
-            bucket: "tactix-data-read-write",
-            key: "training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 005.mp4",
-            url: "https://tactix-data-read-write.s3.amazonaws.com/training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 005.mp4",
-            content_type: "video/mp4",
-            size: 11991150,
-            last_modified: "2025-06-10T08:52:40+00:00",
-            metadata: {},
-            tags: {},
-          },
-        ],
-      ];
+    const allUserList: any[] = [
+      {
+        _id: "6849219b8f9a189bf84aeee6",
+        bucket: "tactix-data-read-write",
+        key: "training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 001.mp4",
+        url: "https://tactix-data-read-write.s3.amazonaws.com/training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 001.mp4",
+        content_type: "video/mp4",
+        size: 21524130,
+        last_modified: "2025-06-09T17:43:17+00:00",
+        metadata: {},
+        tags: {
+          LoS: "",
+          leftDistance: "",
+          defensePersonnel: "",
+          playType: "",
+          fieldSide: "",
+          playSubType: "",
+          fieldZone: "",
+          personnel: "",
+          hash: "",
+        },
+      },
+      {
+        _id: "6849219c8f9a189bf84aeee7",
+        bucket: "tactix-data-read-write",
+        key: "training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 002.mp4",
+        url: "https://tactix-data-read-write.s3.amazonaws.com/training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 002.mp4",
+        content_type: "video/mp4",
+        size: 8756953,
+        last_modified: "2025-06-09T17:43:20+00:00",
+        metadata: {},
+        tags: {
+          LoS: "",
+          leftDistance: "",
+          defensePersonnel: "",
+          playType: "",
+          fieldSide: "",
+          playSubType: "",
+          fieldZone: "",
+          personnel: "",
+          hash: "",
+        },
+      },
+      {
+        _id: "6849219d8f9a189bf84aeee8",
+        bucket: "tactix-data-read-write",
+        key: "training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 003.mp4",
+        url: "https://tactix-data-read-write.s3.amazonaws.com/training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 003.mp4",
+        content_type: "video/mp4",
+        size: 8235423,
+        last_modified: "2025-06-09T17:43:22+00:00",
+        metadata: {},
+        tags: {
+          LoS: "",
+          leftDistance: "",
+          defensePersonnel: "",
+          playType: "",
+          fieldSide: "",
+          playSubType: "",
+          fieldZone: "",
+          personnel: "",
+          hash: "",
+        },
+      },
+      {
+        _id: "6849219d8f9a189bf84aeee9",
+        bucket: "tactix-data-read-write",
+        key: "training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 004.mp4",
+        url: "https://tactix-data-read-write.s3.amazonaws.com/training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 004.mp4",
+        content_type: "video/mp4",
+        size: 13174156,
+        last_modified: "2025-06-10T08:52:24+00:00",
+        metadata: {},
+        tags: {},
+      },
+      {
+        _id: "6849219e8f9a189bf84aeeea",
+        bucket: "tactix-data-read-write",
+        key: "training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 005.mp4",
+        url: "https://tactix-data-read-write.s3.amazonaws.com/training-films/highschool/PLAYON/00 TEST Tags/clip/Clip 005.mp4",
+        content_type: "video/mp4",
+        size: 11991150,
+        last_modified: "2025-06-10T08:52:40+00:00",
+        metadata: {},
+        tags: {},
+      },
+    ];
 
-      // setTotalPages(Math.ceil(data.data.data.count / pageLimit));
-
-      data.data.data.users.map((user: any) => {
-        return allUserList.push({
-          id: user.id,
-          name: user.name ?? "N/A",
-          email: user.email ?? "N/A",
-          number: user.phone,
-          gender: user.gender ?? "N/A",
-          age: user.age ?? "N/A",
-          address: user.address ?? "N/A",
-          createdAt: new Date(user.created_at).toDateString(),
-        });
-      });
-
-      setUserData({
-        rows: allUserList,
-        totalPages,
-      });
-    }
-  }, [data, isSuccess]);
+    setUserData({
+      rows: allUserList,
+      totalPages,
+    });
+  }, []);
 
   useEffect(() => {
     if (isError) {
