@@ -83,25 +83,26 @@ const Sidebar = ({ navigate, opened, toggle }: any) => {
           <Box className="space-y-5">{items}</Box>
         </ScrollArea>
       </Group> */}
-      <Group w="100%" justify="space-between">
-        <Code fw={700}>Video Explorer</Code>
-        <Burger opened={opened} onClick={toggle} hiddenFrom="xl" size="sm" />
-      </Group>
-      <ScrollArea mt="md">
-        {tags.map((tag) => (
-          <Card key={tag.id}>
-            <Group justify="space-between">
-              <Text className="capitalize">{tag.title}</Text>
-              <TextInput
-                onChange={(e) => handleChangeTag(tag.id, e.target.value)}
-                className="w-full"
-                placeholder="Enter Tag Value"
-              />
-            </Group>
-          </Card>
-        ))}
-      </ScrollArea>
       <Stack>
+        <Group w="100%" justify="space-between">
+          <Code fw={700} className="invisible">
+            Video Explorer
+          </Code>
+          <Burger opened={opened} onClick={toggle} hiddenFrom="xl" size="sm" />
+        </Group>
+        <ScrollArea mt="lg">
+          {tags.map((tag) => (
+            <Card key={tag.id}>
+              <Group justify="space-between">
+                <Text className="capitalize">{tag.title}</Text>
+                <TextInput
+                  onChange={(e) => handleChangeTag(tag.id, e.target.value)}
+                  placeholder="Enter Tag Value"
+                />
+              </Group>
+            </Card>
+          ))}
+        </ScrollArea>
         <Button
           leftSection={<IconFilter size={14} />}
           onClick={handleSubmit}
@@ -109,7 +110,8 @@ const Sidebar = ({ navigate, opened, toggle }: any) => {
         >
           Submit
         </Button>
-
+      </Stack>
+      <Stack>
         <Button
           leftSection={<IconLogout size={14} />}
           variant="default"
