@@ -83,7 +83,7 @@ const Users = () => {
         <Text>Total Videos:</Text>
         <Text>{videoData?.totalCount}</Text>
       </Group>
-      <ScrollArea h="calc(100vh - 100px)">
+      <ScrollArea h="calc(100vh - 100px)" w="100%">
         <Table
           verticalSpacing="md"
           striped
