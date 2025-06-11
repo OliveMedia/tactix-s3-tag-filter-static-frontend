@@ -1,1 +1,0 @@
-export { useGetQuestions } from "./useGetQuestions";

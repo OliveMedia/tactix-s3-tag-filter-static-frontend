@@ -1,13 +1,17 @@
 import {
   Box,
+  Card,
   Flex,
+  Grid,
   Image,
   Input,
+  List,
   Menu,
   Pagination,
   rem,
   ScrollArea,
   Skeleton,
+  Stack,
   Table,
   Text,
 } from "@mantine/core";
@@ -31,31 +35,12 @@ const Users = () => {
   const navigate = useNavigate();
   const rows = userData?.rows?.map((user: any) => (
     <Table.Tr key={user.id}>
-      <Table.Td>{user.name}</Table.Td>
-      <Table.Td>{user.email}</Table.Td>
-      <Table.Td>{user.number}</Table.Td>
-      <Table.Td>{user.gender}</Table.Td>
-      <Table.Td>{user.age}</Table.Td>
-      <Table.Td>{user.address}</Table.Td>
-      <Table.Td>{user.createdAt}</Table.Td>
-      <Table.Td>
-        <Menu shadow="md" width={200}>
-          <Menu.Target>
-            <IconDots className="cursor-pointer" />
-          </Menu.Target>
-
-          <Menu.Dropdown>
-            <Menu.Item
-              leftSection={
-                <IconEye style={{ width: rem(14), height: rem(14) }} />
-              }
-              onClick={() => navigate(`/users/${user.id}/conversations`)}
-            >
-              View Conversations
-            </Menu.Item>
-          </Menu.Dropdown>
-        </Menu>
-      </Table.Td>
+      <Table.Td>{user.url}</Table.Td>
+      <Table.Td>{user.content_type}</Table.Td>
+      <Table.Td>{user.size}</Table.Td>
+      <Table.Td>{user.metadata}</Table.Td>
+      <Table.Td>{user.tags}</Table.Td>
+      <Table.Td>{user.last_modified}</Table.Td>
     </Table.Tr>
   ));
 
@@ -69,51 +54,42 @@ const Users = () => {
     </Table.Tr>
   ));
   return (
-    <Flex direction="column" align="end" gap="lg">
-      <Search search={searchValue} setSearch={setSearchValue} />
-      <Table
-        verticalSpacing="lg"
-        striped
-        highlightOnHover
-        withTableBorder
-        className=" relative"
-      >
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Name</Table.Th>
-            <Table.Th>Email</Table.Th>
-            <Table.Th>Number</Table.Th>
-            <Table.Th>Gender</Table.Th>
-            <Table.Th>Age</Table.Th>
-            <Table.Th>Address</Table.Th>
-            <Table.Th>CreatedAt</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody mih="60vh" h="60vh">
-          {isLoading ? (
-            rowsSkeletonLoader
-          ) : userData && userData?.rows?.length > 0 ? (
-            rows
-          ) : (
-            <Box
-              w="100%"
-              h="60vh"
-              className="flex justify-center items-center absolute"
-            >
-              <Flex justify="center" align="center" direction="column">
-                <Image src={NoDataImage} className="h-36 w-36" />
-                <Text>No Data Found</Text>
-              </Flex>
-            </Box>
-          )}
-        </Table.Tbody>
-      </Table>
-      <Pagination
-        total={totalPages}
-        value={currentPage}
-        onChange={setCurrentPage}
-      />
-    </Flex>
+    <Table
+      verticalSpacing="lg"
+      striped
+      highlightOnHover
+      withTableBorder
+      className=" relative"
+    >
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th>Video</Table.Th>
+          <Table.Th>Content Type</Table.Th>
+          <Table.Th>Size</Table.Th>
+          <Table.Th>Metadata</Table.Th>
+          <Table.Th>Tags</Table.Th>
+          <Table.Th>Last Modified</Table.Th>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody mih="60vh" h="60vh">
+        {isLoading ? (
+          rowsSkeletonLoader
+        ) : userData && userData?.rows?.length > 0 ? (
+          rows
+        ) : (
+          <Box
+            w="100%"
+            h="60vh"
+            className="flex justify-center items-center absolute"
+          >
+            <Flex justify="center" align="center" direction="column">
+              <Image src={NoDataImage} className="h-36 w-36" />
+              <Text>No Data Found</Text>
+            </Flex>
+          </Box>
+        )}
+      </Table.Tbody>
+    </Table>
   );
 };
 

@@ -15,23 +15,9 @@ const PageNotFound = lazy(
   () => import("../src/pages/pageNotFound/pageNotFound")
 );
 
-const Home = lazy(() => import("../src/pages/home/home"));
-
-const ChatSettings = lazy(
-  () => import("../src/pages/settings/chatSettings/chatSettings")
-);
-
 const Login = lazy(() => import("../src/pages/login/login"));
 
 const Users = lazy(() => import("../src/pages/users/users"));
-
-const Conversations = lazy(
-  () => import("../src/pages/conversations/conversations")
-);
-
-const Logs = lazy(() => import("../src/pages/userLogs/userLogs"));
-const Bookings = lazy(() => import("../src/pages/bookings/bookings"));
-const Questions = lazy(() => import("../src/pages/questions/questions"));
 
 const theme = createTheme({
   // white: "#e5e5e5",
@@ -56,36 +42,7 @@ export default function App() {
                   </ProtectedRoute>
                 }
               /> */}
-              <Route
-                path="/chat-settings"
-                element={
-                  <ProtectedRoute>
-                    <ErrorBoundary>
-                      <ChatSettings />
-                    </ErrorBoundary>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/questions"
-                element={
-                  <ProtectedRoute>
-                    <ErrorBoundary>
-                      <Questions />
-                    </ErrorBoundary>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/bookings"
-                element={
-                  <ProtectedRoute>
-                    <ErrorBoundary>
-                      <Bookings />
-                    </ErrorBoundary>
-                  </ProtectedRoute>
-                }
-              />
+
               <Route
                 path="/"
                 element={
@@ -96,26 +53,7 @@ export default function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="/logs"
-                element={
-                  <ProtectedRoute>
-                    <ErrorBoundary>
-                      <Logs />
-                    </ErrorBoundary>
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/users/:userId/conversations"
-                element={
-                  <ProtectedRoute>
-                    <ErrorBoundary>
-                      <Conversations />
-                    </ErrorBoundary>
-                  </ProtectedRoute>
-                }
-              />
+
               <Route
                 path="/login"
                 element={

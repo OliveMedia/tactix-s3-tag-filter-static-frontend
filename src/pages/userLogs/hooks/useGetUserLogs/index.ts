@@ -1,1 +1,0 @@
-export { useGetUserLogs } from "./useGetUserLogs";

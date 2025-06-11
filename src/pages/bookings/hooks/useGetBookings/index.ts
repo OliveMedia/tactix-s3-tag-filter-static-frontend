@@ -1,1 +1,0 @@
-export { useGetBookings } from "./useGetBookings";

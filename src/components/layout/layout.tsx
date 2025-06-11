@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AppShell, ScrollArea } from "@mantine/core";
+import { AppShell, Card, ScrollArea, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "../navbar";
@@ -25,8 +25,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <AppShell
       layout="alt"
       header={{ height: 60 }}
-      footer={{ height: 60 }}
-      navbar={{ width: 300, breakpoint: "xl", collapsed: { mobile: !opened } }}
+      footer={{ height: 0 }}
+      navbar={{ width: 450, breakpoint: "xl", collapsed: { mobile: !opened } }}
       padding="md"
     >
       <AppShell.Header>
@@ -36,7 +36,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <SideBar navigate={navigate} opened={opened} toggle={toggle} />
       </AppShell.Navbar>
       <AppShell.Main>
-        <ScrollArea>{children}</ScrollArea>
+        <ScrollArea h="calc(100vh - 100px)">{children}</ScrollArea>
       </AppShell.Main>
     </AppShell>
   );

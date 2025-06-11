@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, TextInput } from "@mantine/core";
 
 import isEmailValidator from "validator/lib/isEmail";
@@ -6,9 +6,8 @@ import isEmailValidator from "validator/lib/isEmail";
 import { useForm } from "@mantine/form";
 import { yupResolver } from "mantine-form-yup-resolver";
 import * as yup from "yup";
-import { client } from "../../utils/api-client";
-import { useActionOnData } from "../../hooks";
 import { Navigate, useNavigate } from "react-router-dom";
+import { notifications } from "@mantine/notifications";
 
 const signInValidationSchema = yup.object().shape({
   email: yup
@@ -27,23 +26,9 @@ const signInValidationSchema = yup.object().shape({
     .required("Password is required"),
 });
 
-const login = (data: any) => {
-  const apiBody = {
-    email: data["email"],
-    password: data["password"],
-  } as const;
-
-  return client({
-    method: "post",
-    endpoint: "superadmin/login",
-    optional: {
-      data: apiBody,
-    },
-  });
-};
-
 const Login = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const token = localStorage.getItem("token");
   const form = useForm({
@@ -56,22 +41,44 @@ const Login = () => {
     validate: yupResolver(signInValidationSchema),
   });
 
-  const { mutateAsync, isPending } = useActionOnData({
-    actionFunction: login,
-    queryToBeInvalidated: ["login"],
-  });
-
   if (token) {
     return <Navigate to="/" state={{ path: location.pathname }} />;
   }
 
   return (
     <form
-      onSubmit={form.onSubmit((values: any) =>
-        mutateAsync(values)
-          .then((res) => localStorage.setItem("token", res.data.data.token))
-          .then(() => navigate("/", { replace: true }))
-      )}
+      onSubmit={form.onSubmit((values: any) => {
+        setIsLoading(true); // 🔹 Start loading
+
+        if (
+          values.email === "admin@yopmail.com" &&
+          values.password === "adminPassword@1"
+        ) {
+          setTimeout(() => {
+            setIsLoading(false);
+            notifications.show({
+              color: "teal",
+              title: "Action successfull",
+              message: "Logged into application successfully",
+            });
+            navigate("/", { replace: true });
+            localStorage.setItem(
+              "token",
+              "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6ImJhNmRlYWUzYzk1NjU3ZWExMTM0NjkwOGNhYzBiMTYzIn0.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNzQ5NjI1NDM0LCJleHAiOjIwNjQ5ODU0MzQsImVtYWlsIjoiYWRtaW5AeW9wbWFpbC5jb20ifQ.MJ7rqgZfl5rvfj5G88X4Uf7TS9v9f016lPVZCysV0Sr6TJmIanNUueE09yhiKMt2ez5PkBxHbxDZKy8EOV6OXQ"
+            );
+          }, 2000);
+        } else {
+          setTimeout(() => {
+            setIsLoading(false);
+            notifications.show({
+              color: "red",
+              title: "Error occured while logging in",
+              message:
+                "It looks like you entered incorrect email or password. Please try again!",
+            });
+          }, 2000);
+        }
+      })}
       className="auth  flex text-secondary-foreground justify-center items-center h-screen"
     >
       <div className="flex bg-gray-50 dark:bg-secondary text-secondary dark:text-white flex-col gap-[30px] border-[1px] border-borderOutline p-[60px] w-[588px] rounded shadow-boxShadow">
@@ -97,8 +104,8 @@ const Login = () => {
 
         <Button
           type="submit"
-          disabled={!(form.isValid() && form.isDirty) || isPending}
-          loading={isPending}
+          disabled={!(form.isValid() && form.isDirty) || isLoading}
+          loading={isLoading}
           loaderProps={{
             type: "oval",
           }}
