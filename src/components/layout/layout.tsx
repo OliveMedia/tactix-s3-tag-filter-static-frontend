@@ -26,7 +26,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       layout="alt"
       header={{ height: 60 }}
       footer={{ height: 0 }}
-      navbar={{ width: 450, breakpoint: "xl", collapsed: { mobile: !opened } }}
+      navbar={{ width: 400, breakpoint: "xl", collapsed: { mobile: !opened } }}
       padding="md"
     >
       <AppShell.Header>

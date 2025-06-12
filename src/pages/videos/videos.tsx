@@ -1,6 +1,8 @@
 import {
+  ActionIcon,
   Badge,
   Box,
+  CopyButton,
   Flex,
   Group,
   Image,
@@ -10,10 +12,12 @@ import {
   Skeleton,
   Table,
   Text,
+  Tooltip,
 } from "@mantine/core";
 import NoDataImage from "../../assets/images/nodata.svg";
 import dayjs from "dayjs";
 import { useGetVideos } from "./hooks";
+import { IconCheck, IconCopy } from "@tabler/icons-react";
 
 const Users = () => {
   const {
@@ -48,21 +52,50 @@ const Users = () => {
             S3 Link
           </a>
         </Table.Td>
-        <Table.Td>{video.key}</Table.Td>
-        <Table.Td>{megabytes.toFixed(2)} MB</Table.Td>
         <Table.Td>
-          <Group>
-            {tags.length > 0
-              ? tags.map((value: any, index) => (
-                  <Badge key={index} tt="none">
-                    {value[0]}: {value[1] ? value[1] : "N/A"}
-                  </Badge>
-                ))
-              : "N/A"}
-          </Group>
+          <Flex align="center" gap="sm" wrap="nowrap">
+            <Tooltip label={video.key} withArrow>
+              <Text truncate w={200}>
+                {video.key}
+              </Text>
+            </Tooltip>
+            <CopyButton value={video.key} timeout={1500}>
+              {({ copied, copy }) => (
+                <Tooltip label={copied ? "Copied" : "Copy"} withArrow>
+                  <ActionIcon
+                    onClick={copy}
+                    variant="light"
+                    color={copied ? "teal" : "gray"}
+                  >
+                    {copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
+                  </ActionIcon>
+                </Tooltip>
+              )}
+            </CopyButton>
+          </Flex>
         </Table.Td>
         <Table.Td>
-          {dayjs(video.last_modified).format("MMMM D, YYYY h:mm A")}
+          <Text className="whitespace-nowrap" size="xs">
+            {megabytes.toFixed(2)} MB
+          </Text>
+        </Table.Td>
+        <Table.Td>
+          <Flex gap="xs" wrap="wrap" maw={600}>
+            {tags.length > 0 ? (
+              tags.map((value: any, index) => (
+                <Badge key={index} tt="none">
+                  {value[0]}: {value[1] ? value[1] : "N/A"}
+                </Badge>
+              ))
+            ) : (
+              <Text size="sm">N/A</Text>
+            )}
+          </Flex>
+        </Table.Td>
+        <Table.Td>
+          <Text className="whitespace-nowrap" size="xs">
+            {dayjs(video.last_modified).format("MMMM D, YYYY h:mm A")}
+          </Text>
         </Table.Td>
       </Table.Tr>
     );

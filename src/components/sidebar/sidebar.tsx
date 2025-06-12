@@ -97,10 +97,13 @@ const Sidebar = ({ navigate, opened, toggle }: any) => {
             {tags.map((tag) => (
               <Card key={tag.id}>
                 <Group justify="space-between">
-                  <Text className="capitalize">{tag.title}</Text>
+                  <Text className="capitalize" size="xs">
+                    {tag.title}
+                  </Text>
                   <TextInput
                     onChange={(e) => handleChangeTag(tag.id, e.target.value)}
                     placeholder="Enter Tag Value"
+                    size="xs"
                   />
                 </Group>
               </Card>
