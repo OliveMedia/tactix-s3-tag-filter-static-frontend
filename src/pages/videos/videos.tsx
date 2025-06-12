@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Anchor,
   Badge,
   Box,
   CopyButton,
@@ -43,14 +44,24 @@ const Users = () => {
             </video>
           }
         </Table.Td> */}
-        <Table.Td>
-          <a
-            href={video.url}
-            target="_blank"
-            className="whitespace-nowrap underline underline-offset-4 text-blue-400"
-          >
+        <Table.Td className="whitespace-nowrap flex items-center space-x-2">
+          <Anchor href={video.url} target="_blank" underline="hover" size="xs">
             S3 Link
-          </a>
+          </Anchor>
+
+          <CopyButton value={video.url} timeout={1500}>
+            {({ copied, copy }) => (
+              <Tooltip label={copied ? "Copied" : "Copy"} withArrow>
+                <ActionIcon
+                  onClick={copy}
+                  variant="light"
+                  color={copied ? "teal" : "gray"}
+                >
+                  {copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
+                </ActionIcon>
+              </Tooltip>
+            )}
+          </CopyButton>
         </Table.Td>
         <Table.Td>
           <Flex align="center" gap="sm" wrap="nowrap">
