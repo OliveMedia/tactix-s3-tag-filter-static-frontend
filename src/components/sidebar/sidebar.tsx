@@ -87,9 +87,9 @@ const Sidebar = ({ navigate, opened, toggle }: any) => {
       </Group> */}
       <Stack>
         <Group w="100%" justify="space-between">
-          <Code fw={700} className="invisible">
-            Video Explorer
-          </Code>
+          <Text fw={700} size="md" className="uppercase">
+            S3 Video Clips Tags
+          </Text>
           <Burger opened={opened} onClick={toggle} hiddenFrom="xl" size="sm" />
         </Group>
         <form onSubmit={handleSubmit}>
