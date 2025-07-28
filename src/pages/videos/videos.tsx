@@ -3,24 +3,35 @@ import {
   Anchor,
   Badge,
   Box,
+  Button,
+  ButtonGroup,
   CopyButton,
   Flex,
   Group,
   Image,
+  Modal,
   Pagination,
   ScrollArea,
   Select,
   Skeleton,
   Table,
   Text,
+  TextInput,
+  Title,
   Tooltip,
 } from "@mantine/core";
 import NoDataImage from "../../assets/images/nodata.svg";
 import dayjs from "dayjs";
 import { useGetVideos } from "./hooks";
-import { IconCheck, IconCopy } from "@tabler/icons-react";
+import { IconCheck, IconCopy, IconFileExport } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
+import { useActionOnData } from "@/hooks";
+import { useState } from "react";
+import isEmailValidator from "validator/lib/isEmail";
 
-const Users = () => {
+const baseURL = import.meta.env.VITE_API_URL;
+
+const Videos = () => {
   const {
     videoData,
     totalPages,
@@ -29,7 +40,27 @@ const Users = () => {
     currentPage,
     isLoading,
     pageLimit,
+    videoFilter,
   } = useGetVideos();
+
+  const [opened, { open, close }] = useDisclosure(false);
+  const [email, setEmail] = useState("");
+
+  const exportData = async (data: any) => {
+    return await fetch(`${baseURL}/v1/getClipsTag`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }).then((res) => res.json());
+  };
+
+  const { isPending, mutateAsync } = useActionOnData({
+    actionFunction: exportData,
+    queryToBeInvalidated: [],
+  });
 
   const rows = videoData?.rows?.map((video: any) => {
     const megabytes = video.size / (1024 * 1024);
@@ -122,66 +153,138 @@ const Users = () => {
     </Table.Tr>
   ));
   return (
-    <Flex direction="column" align="end" gap="lg" h="calc(100vh - 100px)">
-      <Group justify="space-between" w="100%">
-        <Group justify="flex-start">
-          <Text>Total Videos:</Text>
-          <Text>{videoData?.totalCount}</Text>
+    <>
+      <Flex direction="column" align="end" gap="lg" h="calc(100vh - 100px)">
+        <Group justify="space-between" w="100%">
+          <Group justify="flex-start">
+            <Text>Total Videos:</Text>
+            <Text>{videoData?.totalCount}</Text>
+          </Group>
+          {videoData && videoData?.rows?.length > 0 && (
+            <Group>
+              <Group justify="flex-end">
+                <Select
+                  data={["20", "50", "100", "500", "1000"]}
+                  placeholder="Select Limit"
+                  onChange={(value) => setPageLimit(parseInt(value as string))}
+                  value={String(pageLimit)}
+                />
+                <Pagination
+                  total={totalPages}
+                  value={currentPage}
+                  onChange={setCurrentPage}
+                />
+              </Group>
+
+              <Button onClick={open} leftSection={<IconFileExport size={14} />}>
+                Export
+              </Button>
+            </Group>
+          )}
         </Group>
-        <Group justify="flex-end">
-          <Select
-            data={["20", "50", "100", "500", "1000"]}
-            placeholder="Select Limit"
-            onChange={(value) => setPageLimit(parseInt(value as string))}
-            value={String(pageLimit)}
-          />
-          <Pagination
-            total={totalPages}
-            value={currentPage}
-            onChange={setCurrentPage}
-          />
+        <ScrollArea h="calc(100vh - 100px)" w="100%">
+          <Table
+            verticalSpacing="md"
+            striped
+            highlightOnHover
+            withTableBorder
+            className=" relative"
+          >
+            <Table.Thead>
+              <Table.Tr>
+                {/* <Table.Th>Video</Table.Th> */}
+                <Table.Th>Link</Table.Th>
+                <Table.Th>Key</Table.Th>
+                <Table.Th>Size</Table.Th>
+                <Table.Th>Tags</Table.Th>
+                <Table.Th>Last Modified</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody mih="60vh" h="60vh">
+              {isLoading ? (
+                rowsSkeletonLoader
+              ) : videoData && videoData?.rows?.length > 0 ? (
+                rows
+              ) : (
+                <Box
+                  w="100%"
+                  h="60vh"
+                  className="flex justify-center items-center absolute"
+                >
+                  <Flex justify="center" align="center" direction="column">
+                    <Image src={NoDataImage} className="h-36 w-36" />
+                    <Text>No Data Found</Text>
+                  </Flex>
+                </Box>
+              )}
+            </Table.Tbody>
+          </Table>
+        </ScrollArea>
+      </Flex>
+      <Modal
+        opened={opened}
+        onClose={close}
+        title={<Title order={5}>Export Data</Title>}
+      >
+        <Text mb="sm">
+          Enter the email address to receive the exported data.
+        </Text>
+        <TextInput
+          placeholder="your-email@example.com"
+          value={email}
+          onChange={(event) => setEmail(event.currentTarget.value)}
+          required
+        />
+        {email && !isEmailValidator(email) && (
+          <Text c="red" size="xs" mt="xs">
+            Please enter a valid email address.
+          </Text>
+        )}
+
+        <Group justify="flex-end" mt="lg">
+          <Button
+            onClick={() => {
+              const cleanedFilters = videoFilter
+                ? Object.fromEntries(
+                    Object.entries(videoFilter).filter(
+                      ([_, value]) =>
+                        value !== "" && value !== undefined && value !== null
+                    )
+                  )
+                : null;
+              let exportPayload: any = {
+                page: currentPage,
+                pageSize: pageLimit,
+                export: true,
+                email,
+              };
+
+              if (cleanedFilters) {
+                exportPayload = {
+                  ...exportPayload,
+                  filter: cleanedFilters,
+                };
+              }
+              mutateAsync(exportPayload).then(() => {
+                close();
+                setEmail("");
+              });
+            }}
+            loading={isPending}
+            loaderProps={{
+              type: "oval",
+            }}
+            disabled={isPending || !email || !isEmailValidator(email)}
+          >
+            Export
+          </Button>
+          <Button variant="outline" onClick={close} disabled={isPending}>
+            Cancel
+          </Button>
         </Group>
-      </Group>
-      <ScrollArea h="calc(100vh - 100px)" w="100%">
-        <Table
-          verticalSpacing="md"
-          striped
-          highlightOnHover
-          withTableBorder
-          className=" relative"
-        >
-          <Table.Thead>
-            <Table.Tr>
-              {/* <Table.Th>Video</Table.Th> */}
-              <Table.Th>Link</Table.Th>
-              <Table.Th>Key</Table.Th>
-              <Table.Th>Size</Table.Th>
-              <Table.Th>Tags</Table.Th>
-              <Table.Th>Last Modified</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody mih="60vh" h="60vh">
-            {isLoading ? (
-              rowsSkeletonLoader
-            ) : videoData && videoData?.rows?.length > 0 ? (
-              rows
-            ) : (
-              <Box
-                w="100%"
-                h="60vh"
-                className="flex justify-center items-center absolute"
-              >
-                <Flex justify="center" align="center" direction="column">
-                  <Image src={NoDataImage} className="h-36 w-36" />
-                  <Text>No Data Found</Text>
-                </Flex>
-              </Box>
-            )}
-          </Table.Tbody>
-        </Table>
-      </ScrollArea>
-    </Flex>
+      </Modal>
+    </>
   );
 };
 
-export default Users;
+export default Videos;

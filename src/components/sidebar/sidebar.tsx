@@ -12,27 +12,33 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import { IconFilter, IconLogout, IconUsers } from "@tabler/icons-react";
+import {
+  IconFilter,
+  IconLogout,
+  IconRestore,
+  IconUsers,
+} from "@tabler/icons-react";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 const menuItems = [{ icon: IconUsers, label: "Users", link: "/" }];
 
-const initialTags = [
-  { id: 1, title: "Personnel", tagName: "personnel", value: "" },
-  { id: 2, title: "Defense Personnel", tagName: "defencePersonnel", value: "" },
-  { id: 3, title: "Play Type", tagName: "playType", value: "" },
-  { id: 4, title: "Play Subtype", tagName: "playSubType", value: "" },
-  { id: 5, title: "Hash", tagName: "hash", value: "" },
-  { id: 6, title: "Left Distance", tagName: "leftDistance", value: "" },
-  { id: 7, title: "LoS", tagName: "LoS", value: "" },
-  { id: 8, title: "Field Side", tagName: "fieldSide", value: "" },
-  { id: 9, title: "Field Zone", tagName: "fieldZone", value: "" },
+const getInitialTags = () => [
+  { id: 1, title: "Game ID", tagName: "gameId", value: "" },
+  { id: 2, title: "Personnel", tagName: "personnel", value: "" },
+  { id: 3, title: "Defense Personnel", tagName: "defencePersonnel", value: "" },
+  { id: 4, title: "Play Type", tagName: "playType", value: "" },
+  { id: 5, title: "Play Subtype", tagName: "playSubType", value: "" },
+  { id: 6, title: "Hash", tagName: "hash", value: "" },
+  { id: 7, title: "Left Distance", tagName: "leftDistance", value: "" },
+  { id: 8, title: "LoS", tagName: "LoS", value: "" },
+  { id: 9, title: "Field Side", tagName: "fieldSide", value: "" },
+  { id: 10, title: "Field Zone", tagName: "fieldZone", value: "" },
 ];
 
 const Sidebar = ({ navigate, opened, toggle }: any) => {
   const location = useLocation();
-  const [tags, setTags] = useState(initialTags);
+  const [tags, setTags] = useState(getInitialTags());
   const { setVideoFilter, setCurrentPage, setPageLimit } = useGlobalStore();
 
   const items = menuItems.map((item) => (
@@ -46,6 +52,11 @@ const Sidebar = ({ navigate, opened, toggle }: any) => {
       }}
     />
   ));
+
+  const resetTags = () => {
+    setTags(getInitialTags());
+    setVideoFilter(null);
+  };
 
   const handleChangeTag = (id: number, newValue: string) => {
     const updatedTags = tags.map((tag) =>
@@ -67,7 +78,6 @@ const Sidebar = ({ navigate, opened, toggle }: any) => {
         acc[tag.tagName] = tag.value;
         return acc;
       }, {});
-    console.log("Submitted data:", result);
     setCurrentPage(1);
     setPageLimit(20);
     setVideoFilter(result);
@@ -104,20 +114,33 @@ const Sidebar = ({ navigate, opened, toggle }: any) => {
                     onChange={(e) => handleChangeTag(tag.id, e.target.value)}
                     placeholder="Enter Tag Value"
                     size="xs"
+                    value={tag.value}
                   />
                 </Group>
               </Card>
             ))}
           </ScrollArea>
-          <Button
-            leftSection={<IconFilter size={14} />}
-            className="justify-end"
-            type="submit"
-            w="100%"
-            mt="md"
-          >
-            Submit
-          </Button>
+          <Group justify="flex-end">
+            <Button
+              leftSection={<IconFilter size={14} />}
+              className="justify-end"
+              type="submit"
+              mt="md"
+              w="100%"
+            >
+              Submit
+            </Button>
+            <Button
+              leftSection={<IconRestore size={14} />}
+              className="justify-end"
+              type="button"
+              variant="outline"
+              w="100%"
+              onClick={resetTags}
+            >
+              Reset
+            </Button>
+          </Group>
         </form>
       </Stack>
       <Stack>

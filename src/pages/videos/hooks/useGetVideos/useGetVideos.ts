@@ -71,6 +71,7 @@ function useGetVideos() {
     currentPage,
     setPageLimit,
     pageLimit,
+    videoFilter,
   };
 }
 
